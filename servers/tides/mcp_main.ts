@@ -2,14 +2,14 @@
 
 /**
  * Tides MCP Server
- * 
+ *
  * A rhythmic workflow management system inspired by natural tidal patterns.
  * Helps create sustainable productivity cycles through tidal flows.
  */
 
 import { createMCPServer, StdioTransport } from "@packages/mcp-core/mod.ts";
-import { tideTools, tideHandlers } from "./src/tools/tide-tools.ts";
-import { reportTools, reportHandlers } from "./src/tools/report-tools.ts";
+import { tideHandlers, tideTools } from "./src/tools/tide-tools.ts";
+import { reportHandlers, reportTools } from "./src/tools/report-tools.ts";
 
 // Server configuration
 const serverInfo = {
@@ -20,7 +20,7 @@ const serverInfo = {
 
 async function main() {
   console.error("🌊 Starting Tides MCP Server...");
-  
+
   try {
     // Create the MCP server
     const server = createMCPServer({
@@ -28,13 +28,13 @@ async function main() {
       tools: [...tideTools, ...reportTools],
       handlers: { ...tideHandlers, ...reportHandlers },
     });
-    
+
     // Connect to stdio transport
     const transport = new StdioTransport();
     await transport.connect(server);
-    
+
     console.error("🌊 Tides MCP Server connected and ready");
-    
+
     // Keep the process running
     await new Promise(() => {}); // Run forever
   } catch (error) {

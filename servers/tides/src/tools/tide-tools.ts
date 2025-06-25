@@ -4,7 +4,9 @@ import type { MCPTool } from "@packages/mcp-core/types.ts";
 // Schemas for tidal workflow management
 export const CreateTideInputSchema = z.object({
   name: z.string().describe("Name of the tidal workflow"),
-  flow_type: z.enum(["daily", "weekly", "project", "seasonal"]).describe("Type of tidal flow"),
+  flow_type: z.enum(["daily", "weekly", "project", "seasonal"]).describe(
+    "Type of tidal flow",
+  ),
   description: z.string().optional().describe("Description of the workflow"),
 });
 
@@ -37,7 +39,9 @@ export const ListTidesOutputSchema = z.object({
 
 export const FlowTideInputSchema = z.object({
   tide_id: z.string().describe("ID of the tide to flow"),
-  intensity: z.enum(["gentle", "moderate", "strong"]).optional().describe("Flow intensity"),
+  intensity: z.enum(["gentle", "moderate", "strong"]).optional().describe(
+    "Flow intensity",
+  ),
   duration: z.number().optional().describe("Flow duration in minutes"),
 });
 
@@ -74,35 +78,39 @@ export const tideTools: MCPTool[] = [
 
 // Tool handlers
 export const tideHandlers = {
-  create_tide: async (args: z.infer<typeof CreateTideInputSchema>) => {
-    const { name, flow_type, description } = args;
-    
+  create_tide: (args: z.infer<typeof CreateTideInputSchema>) => {
+    const { name, flow_type, description: _description } = args;
+
     // Generate unique ID
-    const tide_id = `tide_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const tide_id = `tide_${Date.now()}_${
+      Math.random().toString(36).substr(2, 9)
+    }`;
     const created_at = new Date().toISOString();
-    
+
     // Calculate next flow based on type
     const now = new Date();
     let next_flow;
-    
+
     switch (flow_type) {
       case "daily":
         next_flow = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
         break;
       case "weekly":
-        next_flow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+        next_flow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+          .toISOString();
         break;
       case "project":
         // Project-based, no automatic next flow
         break;
       case "seasonal":
-        next_flow = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString();
+        next_flow = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000)
+          .toISOString();
         break;
     }
-    
+
     // In a real implementation, this would be saved to a database
     console.log(`Creating tide: ${name} (${flow_type})`);
-    
+
     return {
       success: true,
       tide_id,
@@ -113,9 +121,9 @@ export const tideHandlers = {
     };
   },
 
-  list_tides: async (args: z.infer<typeof ListTidesInputSchema>) => {
+  list_tides: (args: z.infer<typeof ListTidesInputSchema>) => {
     const { flow_type, active_only = false } = args;
-    
+
     // Mock data - in real implementation, this would come from storage
     const mockTides = [
       {
@@ -145,38 +153,44 @@ export const tideHandlers = {
         last_flow: "2024-12-20T14:00:00Z",
       },
     ];
-    
+
     let filteredTides = mockTides;
-    
+
     if (flow_type) {
-      filteredTides = filteredTides.filter(tide => tide.flow_type === flow_type);
+      filteredTides = filteredTides.filter((tide) =>
+        tide.flow_type === flow_type
+      );
     }
-    
+
     if (active_only) {
-      filteredTides = filteredTides.filter(tide => tide.status === "active");
+      filteredTides = filteredTides.filter((tide) => tide.status === "active");
     }
-    
+
     return {
       tides: filteredTides,
       total: filteredTides.length,
     };
   },
 
-  flow_tide: async (args: z.infer<typeof FlowTideInputSchema>) => {
+  flow_tide: (args: z.infer<typeof FlowTideInputSchema>) => {
     const { tide_id, intensity = "moderate", duration = 25 } = args;
-    
+
     const flow_started = new Date().toISOString();
-    const estimated_completion = new Date(Date.now() + duration * 60 * 1000).toISOString();
-    
+    const estimated_completion = new Date(Date.now() + duration * 60 * 1000)
+      .toISOString();
+
     // Generate guidance based on intensity
     const guidanceMap = {
-      gentle: "🌊 Begin with calm, steady focus. Let thoughts flow naturally without forcing. Take breaks as needed.",
-      moderate: "🌊 Maintain focused attention with deliberate action. Balance effort with ease. Stay present to the work.",
-      strong: "🌊 Dive deep with sustained concentration. Channel energy into meaningful progress. Push through resistance mindfully.",
+      gentle:
+        "🌊 Begin with calm, steady focus. Let thoughts flow naturally without forcing. Take breaks as needed.",
+      moderate:
+        "🌊 Maintain focused attention with deliberate action. Balance effort with ease. Stay present to the work.",
+      strong:
+        "🌊 Dive deep with sustained concentration. Channel energy into meaningful progress. Push through resistance mindfully.",
     };
-    
+
     const flow_guidance = guidanceMap[intensity];
-    
+
     const next_actions = [
       "🎯 Set clear intention for this flow session",
       "⏰ Start timer and begin focused work",
@@ -184,9 +198,11 @@ export const tideHandlers = {
       "📝 Capture insights and progress",
       "🌊 Honor the natural rhythm of the work",
     ];
-    
-    console.log(`Starting flow session for tide: ${tide_id} (${intensity} intensity, ${duration}min)`);
-    
+
+    console.log(
+      `Starting flow session for tide: ${tide_id} (${intensity} intensity, ${duration}min)`,
+    );
+
     return {
       success: true,
       tide_id,
