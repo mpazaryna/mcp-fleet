@@ -9,6 +9,7 @@
 
 import { createMCPServer, StdioTransport } from "@packages/mcp-core/mod.ts";
 import { tideTools, tideHandlers } from "./src/tools/tide-tools.ts";
+import { reportTools, reportHandlers } from "./src/tools/report-tools.ts";
 
 // Server configuration
 const serverInfo = {
@@ -24,8 +25,8 @@ async function main() {
     // Create the MCP server
     const server = createMCPServer({
       serverInfo,
-      tools: tideTools,
-      handlers: tideHandlers,
+      tools: [...tideTools, ...reportTools],
+      handlers: { ...tideHandlers, ...reportHandlers },
     });
     
     // Connect to stdio transport
