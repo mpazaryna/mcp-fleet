@@ -11,7 +11,34 @@
         "-v", "${HOME}/Documents/TideReports:/app/reports",
         "--cpus=1",
         "--memory=2g",
-        "mcp/tides:latest"
+        "mcp-fleet:tides"
+      ]
+    },
+    "toolkit": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--name", "toolkit-mcp-session",
+        "-v", "${HOME}/Documents/ToolkitData:/app/data",
+        "--cpus=1",
+        "--memory=2g",
+        "mcp-fleet:toolkit"
+      ]
+    },
+    "orchestration-framework": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--name", "orchestration-mcp-session",
+        "-e", "ANTHROPIC_API_KEY",
+        "-v", "${HOME}/Documents/OrchestrationProjects:/app/projects",
+        "--cpus=1",
+        "--memory=2g",
+        "mcp-fleet:orchestration-framework"
       ]
     }
   }

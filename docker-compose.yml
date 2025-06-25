@@ -82,6 +82,41 @@ services:
       retries: 3
       start_period: 5s
 
+  # Toolkit MCP Server
+  toolkit:
+    build:
+      context: .
+      dockerfile: Dockerfile.toolkit
+    image: mcp-fleet:toolkit
+    container_name: mcp-toolkit
+    depends_on:
+      - mcp-fleet-base
+    environment:
+      - DENO_NO_UPDATE_CHECK=1
+      - DENO_NO_PROMPT=1
+    volumes:
+      # Mount host filesystem for file operations
+      - toolkit-data:/app/data
+    # Resource limits as required by Docker MCP Toolkit
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # MCP servers typically run in the background
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
 volumes:
   # Persistent storage for orchestration framework projects
   orchestration-projects:
@@ -89,6 +124,10 @@ volumes:
   
   # Persistent storage for tide reports
   tides-reports:
+    driver: local
+  
+  # Persistent storage for toolkit file operations
+  toolkit-data:
     driver: local
 
 # Network configuration for MCP servers

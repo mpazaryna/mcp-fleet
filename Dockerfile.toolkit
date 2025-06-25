@@ -1,0 +1,14 @@
+# Dockerfile for Toolkit MCP Server
+FROM mcp-fleet:base
+
+# Copy toolkit server files
+COPY servers/toolkit/ /app/servers/toolkit/
+
+# Set working directory to toolkit server
+WORKDIR /app/servers/toolkit
+
+# Expose MCP port (optional, since we use stdio)
+EXPOSE 3000
+
+# Default command to start the toolkit MCP server
+CMD ["deno", "run", "--allow-all", "mcp_main.ts"]
