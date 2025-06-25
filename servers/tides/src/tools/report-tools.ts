@@ -1,5 +1,7 @@
 import { z } from "zod";
 import type { MCPTool } from "@packages/mcp-core/types.ts";
+import { tideStorage } from "../storage/index.ts";
+import type { TideData } from "../storage/index.ts";
 
 // Schemas for tide report saving
 export const SaveTideReportInputSchema = z.object({
@@ -43,79 +45,13 @@ export const ExportAllTidesOutputSchema = z.object({
   export_summary: z.string(),
 });
 
-// Report generation utilities
-interface TideData {
-  id: string;
-  name: string;
-  flow_type: string;
-  status: "active" | "paused" | "completed";
-  created_at: string;
-  last_flow?: string;
-  next_flow?: string;
-  description?: string;
-  flow_history?: Array<{
-    timestamp: string;
-    intensity: string;
-    duration: number;
-    notes?: string;
-  }>;
+// Helper functions to get tide data from storage
+async function getTideData(tide_id: string): Promise<TideData | null> {
+  return await tideStorage.getTide(tide_id);
 }
 
-// Mock tide data store (in real implementation, this would come from a database)
-const mockTideData: Record<string, TideData> = {
-  "tide_1703123456789_abc123": {
-    id: "tide_1703123456789_abc123",
-    name: "Morning Reflection",
-    flow_type: "daily",
-    status: "active",
-    created_at: "2024-12-20T08:00:00Z",
-    last_flow: "2024-12-24T08:00:00Z",
-    next_flow: "2024-12-25T08:00:00Z",
-    description: "Daily morning mindfulness and intention setting",
-    flow_history: [
-      { timestamp: "2024-12-20T08:00:00Z", intensity: "gentle", duration: 20 },
-      {
-        timestamp: "2024-12-21T08:15:00Z",
-        intensity: "moderate",
-        duration: 25,
-      },
-      { timestamp: "2024-12-22T08:00:00Z", intensity: "gentle", duration: 15 },
-      {
-        timestamp: "2024-12-23T08:30:00Z",
-        intensity: "moderate",
-        duration: 30,
-      },
-      { timestamp: "2024-12-24T08:00:00Z", intensity: "gentle", duration: 20 },
-    ],
-  },
-  "tide_1703123456790_def456": {
-    id: "tide_1703123456790_def456",
-    name: "Weekly Planning",
-    flow_type: "weekly",
-    status: "active",
-    created_at: "2024-12-15T10:00:00Z",
-    last_flow: "2024-12-22T10:00:00Z",
-    next_flow: "2024-12-29T10:00:00Z",
-    description: "Weekly review and planning session",
-    flow_history: [
-      {
-        timestamp: "2024-12-15T10:00:00Z",
-        intensity: "moderate",
-        duration: 60,
-      },
-      { timestamp: "2024-12-22T10:00:00Z", intensity: "strong", duration: 90 },
-    ],
-  },
-};
-
-function getTideData(tide_id: string): TideData | null {
-  // In real implementation, this would query a database
-  return mockTideData[tide_id] || null;
-}
-
-function getAllTides(): TideData[] {
-  // In real implementation, this would query a database
-  return Object.values(mockTideData);
+async function getAllTides(): Promise<TideData[]> {
+  return await tideStorage.listTides();
 }
 
 function generateFileName(
@@ -167,99 +103,98 @@ function generateMarkdownReport(
   tide: TideData,
   includeHistory: boolean,
 ): string {
-  const stats = tide.flow_history?.length
-    ? {
-      total: tide.flow_history.length,
-      avgDuration: Math.round(
-        tide.flow_history.reduce((sum, flow) => sum + flow.duration, 0) /
-          tide.flow_history.length,
-      ),
-      intensityDist: tide.flow_history.reduce((acc, flow) => {
-        acc[flow.intensity] = (acc[flow.intensity] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
-    }
-    : { total: 0, avgDuration: 0, intensityDist: {} };
+  let md = `# Tide Report: ${tide.name}\n\n`;
+  md += `**ID:** ${tide.id}  \n`;
+  md += `**Type:** ${tide.flow_type}  \n`;
+  md += `**Status:** ${tide.status}  \n`;
+  md += `**Created:** ${new Date(tide.created_at).toLocaleString()}  \n`;
 
-  let markdown = `# 🌊 Tide Report: ${tide.name}
-
-## Overview
-- **ID**: ${tide.id}
-- **Type**: ${tide.flow_type}
-- **Status**: ${tide.status}
-- **Created**: ${new Date(tide.created_at).toLocaleDateString()}
-- **Description**: ${tide.description || "No description"}
-
-## Flow Statistics
-- **Total Flows**: ${stats.total}
-- **Average Duration**: ${stats.avgDuration} minutes
-- **Last Flow**: ${
-    tide.last_flow ? new Date(tide.last_flow).toLocaleDateString() : "Never"
-  }
-- **Next Flow**: ${
-    tide.next_flow
-      ? new Date(tide.next_flow).toLocaleDateString()
-      : "Not scheduled"
+  if (tide.description) {
+    md += `\n## Description\n${tide.description}\n`;
   }
 
-### Intensity Distribution
-${
-    Object.entries(stats.intensityDist).map(([intensity, count]) =>
-      `- **${
-        intensity.charAt(0).toUpperCase() + intensity.slice(1)
-      }**: ${count} flows`
-    ).join("\n")
+  md += `\n## Statistics\n`;
+  const totalFlows = tide.flow_history?.length || 0;
+  md += `- **Total Flows:** ${totalFlows}\n`;
+
+  if (totalFlows > 0 && tide.flow_history) {
+    const totalDuration = tide.flow_history.reduce(
+      (sum, flow) => sum + flow.duration,
+      0,
+    );
+    const avgDuration = Math.round(totalDuration / totalFlows);
+    md += `- **Average Duration:** ${avgDuration} minutes\n`;
+    md += `- **Total Time:** ${totalDuration} minutes (${
+      (totalDuration / 60).toFixed(1)
+    } hours)\n`;
+
+    // Intensity distribution
+    const intensityDist = tide.flow_history.reduce((acc, flow) => {
+      acc[flow.intensity] = (acc[flow.intensity] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    md += `\n### Intensity Distribution\n`;
+    Object.entries(intensityDist).forEach(([intensity, count]) => {
+      const percentage = ((count / totalFlows) * 100).toFixed(1);
+      md += `- **${intensity}:** ${count} flows (${percentage}%)\n`;
+    });
   }
-`;
 
-  if (includeHistory && tide.flow_history?.length) {
-    markdown += `
-## Flow History
+  if (includeHistory && tide.flow_history && tide.flow_history.length > 0) {
+    md += `\n## Flow History\n\n`;
+    md += `| Date/Time | Intensity | Duration | Notes |\n`;
+    md += `|-----------|-----------|----------|-------|\n`;
 
-| Date | Intensity | Duration | Notes |
-|------|-----------|----------|-------|
-${
-      tide.flow_history.map((flow) =>
-        `| ${
-          new Date(flow.timestamp).toLocaleDateString()
-        } | ${flow.intensity} | ${flow.duration}min | ${flow.notes || "-"} |`
-      ).join("\n")
-    }
-`;
+    tide.flow_history.forEach((flow) => {
+      const date = new Date(flow.timestamp).toLocaleString();
+      const notes = flow.notes || "-";
+      md += `| ${date} | ${flow.intensity} | ${flow.duration}min | ${notes} |\n`;
+    });
   }
 
-  markdown += `
-
----
-*Report generated on ${new Date().toLocaleDateString()} at ${
-    new Date().toLocaleTimeString()
-  }*
-`;
-
-  return markdown;
+  md += `\n---\n*Report generated: ${new Date().toLocaleString()}*\n`;
+  return md;
 }
 
 function generateCSVReport(
   tide: TideData,
   includeHistory: boolean,
 ): string {
-  if (!includeHistory || !tide.flow_history?.length) {
-    // Basic tide info as CSV
-    return `id,name,flow_type,status,created_at,last_flow,next_flow,description
-"${tide.id}","${tide.name}","${tide.flow_type}","${tide.status}","${tide.created_at}","${
-      tide.last_flow || ""
-    }","${tide.next_flow || ""}","${tide.description || ""}"`;
+  const lines: string[] = [];
+
+  if (includeHistory && tide.flow_history && tide.flow_history.length > 0) {
+    // Detailed CSV with flow history
+    lines.push(
+      "Tide ID,Tide Name,Flow Type,Status,Flow Date,Intensity,Duration (min),Notes",
+    );
+    tide.flow_history.forEach((flow) => {
+      const notes = flow.notes ? `"${flow.notes.replace(/"/g, '""')}"` : "";
+      lines.push(
+        `"${tide.id}","${tide.name}","${tide.flow_type}","${tide.status}","${flow.timestamp}","${flow.intensity}",${flow.duration},${notes}`,
+      );
+    });
+  } else {
+    // Summary CSV
+    lines.push(
+      "Tide ID,Tide Name,Flow Type,Status,Created At,Last Flow,Next Flow,Total Flows,Avg Duration (min)",
+    );
+    const totalFlows = tide.flow_history?.length || 0;
+    const avgDuration = totalFlows > 0 && tide.flow_history
+      ? Math.round(
+        tide.flow_history.reduce((sum, flow) => sum + flow.duration, 0) /
+          totalFlows,
+      )
+      : 0;
+
+    lines.push(
+      `"${tide.id}","${tide.name}","${tide.flow_type}","${tide.status}","${tide.created_at}","${
+        tide.last_flow || ""
+      }","${tide.next_flow || ""}",${totalFlows},${avgDuration}`,
+    );
   }
 
-  // Flow history as CSV
-  let csv = `tide_id,tide_name,flow_type,timestamp,intensity,duration,notes\n`;
-  for (const flow of tide.flow_history) {
-    csv +=
-      `"${tide.id}","${tide.name}","${tide.flow_type}","${flow.timestamp}","${flow.intensity}",${flow.duration},"${
-        flow.notes || ""
-      }"\n`;
-  }
-  return csv;
+  return lines.join("\n");
 }
 
 // Tool definitions
@@ -286,7 +221,7 @@ export const reportHandlers = {
 
     try {
       // Get tide data
-      const tide = getTideData(tide_id);
+      const tide = await getTideData(tide_id);
       if (!tide) {
         throw new Error(`Tide with ID ${tide_id} not found`);
       }
@@ -309,7 +244,7 @@ export const reportHandlers = {
 
       // Determine file path
       const fileName = output_path || generateFileName(tide.name, format);
-      const reportsDir = "/app/reports";
+      const reportsDir = Deno.env.get("TIDES_REPORTS_DIR") || "/app/reports";
       const subDir = `${reportsDir}/tides/${tide.flow_type}`;
       const filePath = `${subDir}/${fileName}`;
 
@@ -324,7 +259,7 @@ export const reportHandlers = {
       await Deno.writeTextFile(filePath, content);
       const stat = await Deno.stat(filePath);
 
-      console.log(
+      console.error(
         `📊 Saved ${format} report for tide "${tide.name}" to ${filePath}`,
       );
 
@@ -349,7 +284,7 @@ export const reportHandlers = {
 
     try {
       // Get all tides
-      let tides = getAllTides();
+      let tides = await getAllTides();
 
       // Apply filters
       if (filter?.flow_type) {
@@ -361,62 +296,65 @@ export const reportHandlers = {
       }
 
       if (filter?.date_range) {
-        const startDate = filter.date_range.start
+        const start = filter.date_range.start
           ? new Date(filter.date_range.start)
           : null;
-        const endDate = filter.date_range.end
+        const end = filter.date_range.end
           ? new Date(filter.date_range.end)
           : null;
 
         tides = tides.filter((tide) => {
-          const createdDate = new Date(tide.created_at);
-          if (startDate && createdDate < startDate) return false;
-          if (endDate && createdDate > endDate) return false;
+          const created = new Date(tide.created_at);
+          if (start && created < start) return false;
+          if (end && created > end) return false;
           return true;
         });
       }
 
+      // Create reports
+      const reportsDir = Deno.env.get("TIDES_REPORTS_DIR") || "/app/reports";
+      const baseDir = output_directory
+        ? `${reportsDir}/${output_directory}`
+        : `${reportsDir}/exports/${new Date().toISOString().split("T")[0]}`;
+
+      await Deno.mkdir(baseDir, { recursive: true });
+
       const filesCreated: string[] = [];
-      const timestamp = new Date().toISOString().split("T")[0];
 
-      // Export each tide
       for (const tide of tides) {
-        try {
-          const saveResult = await reportHandlers.save_tide_report({
-            tide_id: tide.id,
-            format,
-            output_path: output_directory
-              ? `${output_directory}/${
-                generateFileName(tide.name, format, timestamp)
-              }`
-              : undefined,
-            include_history: true,
-          });
-
-          if (saveResult.success) {
-            filesCreated.push(saveResult.file_path);
-          }
-        } catch (error) {
-          console.error(`Failed to export tide ${tide.name}:`, error);
+        let content: string;
+        switch (format) {
+          case "json":
+            content = generateJSONReport(tide, true);
+            break;
+          case "markdown":
+            content = generateMarkdownReport(tide, true);
+            break;
+          case "csv":
+            content = generateCSVReport(tide, true);
+            break;
+          default:
+            continue;
         }
+
+        const fileName = generateFileName(tide.name, format);
+        const filePath = `${baseDir}/${fileName}`;
+        await Deno.writeTextFile(filePath, content);
+        filesCreated.push(filePath);
       }
 
-      const exportSummary =
-        `Exported ${filesCreated.length} of ${tides.length} tides in ${format} format${
-          filter ? " with filters applied" : ""
-        }`;
-
-      console.log(`📦 ${exportSummary}`);
+      const summary = `Exported ${filesCreated.length} tide reports to ${baseDir}`;
+      console.error(`📊 ${summary}`);
 
       return {
         success: true,
         files_created: filesCreated,
-        total_tides: tides.length,
-        export_summary: exportSummary,
+        total_tides: filesCreated.length,
+        export_summary: summary,
       };
     } catch (error) {
       throw new Error(
-        `Failed to export all tides: ${
+        `Failed to export tides: ${
           error instanceof Error ? error.message : String(error)
         }`,
       );
