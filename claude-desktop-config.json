@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "tides": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--name", "tides-mcp-session",
+        "-e", "ANTHROPIC_API_KEY",
+        "--cpus=1",
+        "--memory=2g",
+        "mcp/tides:latest"
+      ]
+    }
+  }
+}

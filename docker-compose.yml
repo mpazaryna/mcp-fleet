@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # Base image build
+  mcp-fleet-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: mcp-fleet:base
+    command: ["echo", "Base image built successfully"]
+
+  # Orchestration Framework MCP Server
+  orchestration-framework:
+    build:
+      context: .
+      dockerfile: Dockerfile.orchestration
+    image: mcp-fleet:orchestration-framework
+    container_name: mcp-orchestration-framework
+    depends_on:
+      - mcp-fleet-base
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DENO_NO_UPDATE_CHECK=1
+      - DENO_NO_PROMPT=1
+    volumes:
+      # Persist projects directory for orchestration framework
+      - orchestration-projects:/app/projects
+    # Resource limits as required by Docker MCP Toolkit
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # MCP servers typically run in the background
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # Tides MCP Server
+  tides:
+    build:
+      context: .
+      dockerfile: Dockerfile.tides
+    image: mcp-fleet:tides
+    container_name: mcp-tides
+    depends_on:
+      - mcp-fleet-base
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - DENO_NO_UPDATE_CHECK=1
+      - DENO_NO_PROMPT=1
+    # Resource limits as required by Docker MCP Toolkit
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # MCP servers typically run in the background
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  # Persistent storage for orchestration framework projects
+  orchestration-projects:
+    driver: local
+
+# Network configuration for MCP servers
+networks:
+  default:
+    name: mcp-fleet-network
