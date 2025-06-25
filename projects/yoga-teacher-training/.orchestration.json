@@ -1,0 +1,61 @@
+{
+  "name": "yoga-teacher-training",
+  "created": "2025-06-15T19:37:23.430Z",
+  "currentPhase": "exploration",
+  "status": "initialized",
+  "sessionCount": 1,
+  "lastSessionDate": "2025-06-15T19:44:27.561Z",
+  "flywheelIterations": [
+    {
+      "iterationId": "flywheel-1750016719612",
+      "triggerPhase": "specification",
+      "triggerReason": "Gap analysis identified areas needing additional exploration",
+      "targetPhase": "exploration",
+      "gapsIdentified": [
+        "No specification content found - specification phase not started"
+      ],
+      "updatedArtifacts": [
+        "tasks.md"
+      ],
+      "newInsights": [],
+      "timestamp": "2025-06-15T19:45:19.612Z"
+    },
+    {
+      "iterationId": "flywheel-1750016751113",
+      "triggerPhase": "specification",
+      "triggerReason": "Gap analysis identified areas needing additional exploration",
+      "targetPhase": "exploration",
+      "gapsIdentified": [
+        "No specification content found - specification phase not started"
+      ],
+      "updatedArtifacts": [
+        "tasks.md"
+      ],
+      "newInsights": [],
+      "timestamp": "2025-06-15T19:45:51.113Z"
+    },
+    {
+      "iterationId": "flywheel-1750016770433",
+      "triggerPhase": "specification",
+      "triggerReason": "Gap analysis identified areas needing additional exploration",
+      "targetPhase": "exploration",
+      "gapsIdentified": [
+        "No specification content found - specification phase not started"
+      ],
+      "updatedArtifacts": [
+        "tasks.md"
+      ],
+      "newInsights": [],
+      "timestamp": "2025-06-15T19:46:10.433Z"
+    }
+  ],
+  "cycleCount": 3,
+  "patterns": [
+    {
+      "patternName": "default_specification",
+      "usedAt": "2025-06-15T20:09:35.432Z",
+      "version": 1,
+      "customizations": {}
+    }
+  ]
+}

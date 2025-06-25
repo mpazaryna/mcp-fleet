@@ -1,0 +1,26 @@
+{
+  "workspace": [
+    "./servers/orchestration-framework",
+    "./servers/tides",
+    "./packages/mcp-core",
+    "./packages/claude-client",
+    "./packages/common-tools"
+  ],
+  "imports": {
+    "@packages/": "./packages/",
+    "@servers/": "./servers/",
+    "@std/": "https://deno.land/std@0.208.0/",
+    "@mizchi/mcp-helper": "jsr:@mizchi/mcp-helper@^0.0.4",
+    "zod": "npm:zod@^3.22.0",
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^0.24.0",
+    "@modelcontextprotocol/sdk": "npm:@modelcontextprotocol/sdk@^0.5.0"
+  },
+  "tasks": {
+    "test": "deno task test:packages && deno task test:servers",
+    "test:packages": "deno test packages/",
+    "test:servers": "deno test servers/",
+    "lint": "deno lint",
+    "fmt": "deno fmt",
+    "check": "deno check servers/*/mcp_main.ts"
+  }
+}

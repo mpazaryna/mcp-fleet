@@ -1,0 +1,11 @@
+{
+  "name": "@packages/claude-client",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./client": "./client.ts",
+    "./conversation": "./conversation.ts",
+    "./streaming": "./streaming.ts",
+    "./types": "./types.ts"
+  }
+}

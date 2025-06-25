@@ -1,0 +1,10 @@
+{
+  "name": "@packages/common-tools",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./file-tools": "./file-tools.ts",
+    "./project-tools": "./project-tools.ts",
+    "./git-tools": "./git-tools.ts"
+  }
+}
