@@ -59,6 +59,9 @@ services:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - DENO_NO_UPDATE_CHECK=1
       - DENO_NO_PROMPT=1
+    volumes:
+      # Persist reports directory for tide exports
+      - tides-reports:/app/reports
     # Resource limits as required by Docker MCP Toolkit
     deploy:
       resources:
@@ -82,6 +85,10 @@ services:
 volumes:
   # Persistent storage for orchestration framework projects
   orchestration-projects:
+    driver: local
+  
+  # Persistent storage for tide reports
+  tides-reports:
     driver: local
 
 # Network configuration for MCP servers

@@ -8,6 +8,7 @@
         "-i",
         "--name", "tides-mcp-session",
         "-e", "ANTHROPIC_API_KEY",
+        "-v", "${HOME}/Documents/TideReports:/app/reports",
         "--cpus=1",
         "--memory=2g",
         "mcp/tides:latest"

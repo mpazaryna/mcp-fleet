@@ -35,11 +35,19 @@ if docker ps -q -f name=tides-mcp >/dev/null 2>&1; then
     docker rm tides-mcp
 fi
 
+# Create reports directory if it doesn't exist
+REPORTS_DIR="${HOME}/Documents/TideReports"
+if [ ! -d "$REPORTS_DIR" ]; then
+    echo "📁 Creating reports directory at $REPORTS_DIR"
+    mkdir -p "$REPORTS_DIR"
+fi
+
 # Run the container with MCP Toolkit requirements
 echo "🚀 Starting Tides MCP container..."
 docker run -d \
     --name tides-mcp \
     -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
+    -v "${REPORTS_DIR}:/app/reports" \
     --restart unless-stopped \
     --cpus="1" \
     --memory="2g" \
@@ -57,6 +65,10 @@ echo "🌊 Available tools in Claude Desktop:"
 echo "   • create_tide - Create tidal workflows"
 echo "   • list_tides - List all workflows"
 echo "   • flow_tide - Start flow sessions"
+echo "   • save_tide_report - Save individual tide reports"
+echo "   • export_all_tides - Export all tides to files"
+echo ""
+echo "📁 Reports will be saved to: $REPORTS_DIR"
 echo ""
 echo "📋 Container status:"
 docker ps --filter name=tides-mcp --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"

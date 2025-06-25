@@ -70,6 +70,19 @@ Implements 4-phase systematic methodology: Exploration → Specification → Exe
 ### Tides (`/servers/tides/`)
 Rhythmic workflow management based on natural tidal patterns for sustainable productivity cycles.
 
+**Core Tools:**
+- `create_tide` - Create new tidal workflows for different time scales
+- `list_tides` - List and filter existing workflows with status
+- `flow_tide` - Start focused flow sessions with intensity control
+- `save_tide_report` - Export individual tide reports (JSON/Markdown/CSV)
+- `export_all_tides` - Batch export with filtering and date ranges
+
+**Report Features:**
+- Multiple export formats with rich statistics and flow history
+- Automatic file organization by flow type and date
+- Docker volume mounting for persistent storage outside containers
+- Reports saved to `~/Documents/TideReports/` when using recommended deployment
+
 ## Shared Packages
 
 ### mcp-core (`/packages/mcp-core/`)

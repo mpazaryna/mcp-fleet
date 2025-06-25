@@ -13,6 +13,12 @@ WORKDIR /app/servers/tides
 ENV DENO_NO_UPDATE_CHECK=1
 ENV DENO_NO_PROMPT=1
 
+# Create reports directory for file exports
+RUN mkdir -p /app/reports && chown -R root:root /app/reports
+
+# Create volume mount point for persistent reports
+VOLUME ["/app/reports"]
+
 # Expose no ports - MCP uses stdio transport
 # No EXPOSE directive needed for stdio-based MCP servers
 
@@ -29,4 +35,4 @@ LABEL org.opencontainers.image.description="Rhythmic workflow management based o
 LABEL org.opencontainers.image.vendor="MCP Fleet"
 LABEL org.opencontainers.image.version="1.0.0"
 LABEL mcp.server.name="tides"
-LABEL mcp.server.tools="workflow_management,rhythm_tracking,tide_creation"
+LABEL mcp.server.tools="workflow_management,rhythm_tracking,tide_creation,report_generation"
