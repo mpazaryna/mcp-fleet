@@ -58,7 +58,17 @@ jobs:
           type=ref,event=pr
           type=raw,value=latest,enable={{is_default_branch}}
 
-    - name: Build and push base image
+    - name: Build base image locally
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.python-base
+        load: true
+        tags: mcp-fleet:python-base
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+    - name: Build and push base image to registry
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -67,11 +77,6 @@ jobs:
         tags: ${{ steps.meta-base.outputs.tags }}
         labels: ${{ steps.meta-base.outputs.labels }}
         cache-from: type=gha
-        cache-to: type=gha,mode=max
-        load: true
-        
-    - name: Tag base image locally for dependent builds
-      run: docker tag ${{ fromJSON(steps.meta-base.outputs.json).tags[0] }} mcp-fleet:python-base
 
     - name: Extract metadata for tides image
       id: meta-tides
