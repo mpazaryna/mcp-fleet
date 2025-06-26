@@ -68,6 +68,10 @@ jobs:
         labels: ${{ steps.meta-base.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        load: true
+        
+    - name: Tag base image locally for dependent builds
+      run: docker tag ${{ fromJSON(steps.meta-base.outputs.json).tags[0] }} mcp-fleet:python-base
 
     - name: Extract metadata for tides image
       id: meta-tides
