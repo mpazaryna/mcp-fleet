@@ -27,6 +27,19 @@
         "mcp-fleet:toolkit"
       ]
     },
+    "compass": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--name", "compass-mcp-session",
+        "-v", "${HOME}/Documents/CompassProjects:/app/workspace",
+        "--cpus=1",
+        "--memory=2g",
+        "mcp-fleet:compass"
+      ]
+    },
     "orchestration-framework": {
       "command": "docker",
       "args": [

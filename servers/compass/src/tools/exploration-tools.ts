@@ -112,6 +112,14 @@ export const explorationTools: MCPTool[] = [
 async function getProjectsDirectory(customDir?: string): Promise<string> {
   if (customDir) return customDir;
   
+  // Check if running in Docker container with COMPASS_WORKSPACE env var
+  const dockerWorkspace = Deno.env.get("COMPASS_WORKSPACE");
+  if (dockerWorkspace) {
+    await Deno.mkdir(dockerWorkspace, { recursive: true });
+    return dockerWorkspace;
+  }
+  
+  // Fall back to home directory for native installations
   const homeDir = Deno.env.get("HOME") || Deno.env.get("USERPROFILE");
   if (!homeDir) {
     throw new Error("Unable to determine user home directory");

@@ -12,6 +12,7 @@ WORKDIR /app
 # Environment variables for MCP server configuration
 ENV DENO_NO_UPDATE_CHECK=1
 ENV DENO_NO_PROMPT=1
+ENV COMPASS_WORKSPACE=/app/workspace
 
 # Create workspace directory for project storage
 RUN mkdir -p /app/workspace && chown -R root:root /app/workspace
