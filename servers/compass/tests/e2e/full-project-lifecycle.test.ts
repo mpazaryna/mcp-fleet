@@ -13,6 +13,14 @@ Deno.test({
     await Deno.mkdir(testWorkspace, { recursive: true });
     
     const projectName = "sample-ecommerce-platform";
+    const projectPath = join(testWorkspace, projectName);
+    
+    // Clean up any existing project from previous runs
+    try {
+      await Deno.remove(projectPath, { recursive: true });
+    } catch {
+      // Ignore if it doesn't exist
+    }
     
     try {
       console.log(`\n=== E2E Test: Creating project in ${testWorkspace} ===`);
@@ -26,8 +34,6 @@ Deno.test({
       
       assertEquals(initResult.success, true);
       console.log(`✅ Project '${projectName}' initialized successfully`);
-      
-      const projectPath = join(testWorkspace, projectName);
       
       // Verify project structure was created
       const expectedDirs = ["exploration", "specification", "execution", "feedback"];
