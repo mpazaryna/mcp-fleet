@@ -1,17 +1,15 @@
-# Dockerfile for Compass MCP Server
+# Dockerfile for Compass MCP Server (Python)
 # Optimized for Docker Desktop MCP Toolkit
 
-FROM mcp-fleet:base AS compass
+FROM mcp-fleet:python-base AS compass
 
 # Set working directory to the server directory
-WORKDIR /app
+WORKDIR /app/python-servers/compass
 
 # Set resource limits as required by Docker MCP Toolkit
 # CPU limit: 1 core, Memory limit: 2GB (handled by Docker runtime)
 
 # Environment variables for MCP server configuration
-ENV DENO_NO_UPDATE_CHECK=1
-ENV DENO_NO_PROMPT=1
 ENV COMPASS_WORKSPACE=/app/workspace
 
 # Create workspace directory for project storage
@@ -27,13 +25,12 @@ VOLUME ["/app/workspace"]
 STOPSIGNAL SIGTERM
 
 # Set the entry point to the MCP server
-# The --allow-all flag is required for MCP servers to access necessary system resources
-ENTRYPOINT ["deno", "run", "--allow-all", "servers/compass/mcp_main.ts"]
+ENTRYPOINT ["python", "main.py"]
 
 # Add labels for Docker MCP Toolkit integration
 LABEL org.opencontainers.image.title="Compass MCP Server"
 LABEL org.opencontainers.image.description="Systematic project methodology through exploration-to-execution phases"
 LABEL org.opencontainers.image.vendor="MCP Fleet"
-LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.version="2.0.0"
 LABEL mcp.server.name="compass"
 LABEL mcp.server.tools="project_management,exploration,specification,execution,systematic_methodology"

@@ -1,14 +1,13 @@
 version: '3.8'
 
 services:
-  # Base image build
-  mcp-fleet-base:
+  # Python base image build
+  mcp-fleet-python-base:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: production
-    image: mcp-fleet:base
-    command: ["echo", "Base image built successfully"]
+      dockerfile: Dockerfile.python-base
+    image: mcp-fleet:python-base
+    command: ["echo", "Python base image built successfully"]
 
   # Orchestration Framework MCP Server
   orchestration-framework:
@@ -40,7 +39,7 @@ services:
     tty: true
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      test: ["CMD", "python", "-c", "print('Health check passed')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -54,11 +53,9 @@ services:
     image: mcp-fleet:tides
     container_name: mcp-tides
     depends_on:
-      - mcp-fleet-base
+      - mcp-fleet-python-base
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - DENO_NO_UPDATE_CHECK=1
-      - DENO_NO_PROMPT=1
     volumes:
       # Persist reports directory for tide exports
       - tides-reports:/app/reports
@@ -76,7 +73,7 @@ services:
     tty: true
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      test: ["CMD", "python", "-c", "print('Health check passed')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -90,10 +87,7 @@ services:
     image: mcp-fleet:compass
     container_name: mcp-compass
     depends_on:
-      - mcp-fleet-base
-    environment:
-      - DENO_NO_UPDATE_CHECK=1
-      - DENO_NO_PROMPT=1
+      - mcp-fleet-python-base
     volumes:
       # Persist workspace directory for project storage
       - compass-workspace:/app/workspace
@@ -111,7 +105,7 @@ services:
     tty: true
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      test: ["CMD", "python", "-c", "print('Health check passed')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -125,10 +119,7 @@ services:
     image: mcp-fleet:toolkit
     container_name: mcp-toolkit
     depends_on:
-      - mcp-fleet-base
-    environment:
-      - DENO_NO_UPDATE_CHECK=1
-      - DENO_NO_PROMPT=1
+      - mcp-fleet-python-base
     volumes:
       # Mount host filesystem for file operations
       - toolkit-data:/app/data
@@ -146,7 +137,7 @@ services:
     tty: true
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      test: ["CMD", "python", "-c", "print('Health check passed')"]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -6,7 +6,13 @@
       "Bash(deno test:*)",
       "Bash(ls:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(docker logs:*)",
+      "Bash(find:*)",
+      "Bash(uv:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(true)"
     ],
     "deny": []
   }

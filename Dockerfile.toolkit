@@ -1,14 +1,27 @@
-# Dockerfile for Toolkit MCP Server
-FROM mcp-fleet:base
+# Dockerfile for Toolkit MCP Server (Python)
+# Optimized for Docker Desktop MCP Toolkit
 
-# Copy toolkit server files
-COPY servers/toolkit/ /app/servers/toolkit/
+FROM mcp-fleet:python-base AS toolkit
 
-# Set working directory to toolkit server
-WORKDIR /app/servers/toolkit
+# Set working directory to the server directory
+WORKDIR /app/python-servers/toolkit
 
-# Expose MCP port (optional, since we use stdio)
-EXPOSE 3000
+# Set resource limits as required by Docker MCP Toolkit
+# CPU limit: 1 core, Memory limit: 2GB (handled by Docker runtime)
 
-# Default command to start the toolkit MCP server
-CMD ["deno", "run", "--allow-all", "mcp_main.ts"]
+# Expose no ports - MCP uses stdio transport
+# No EXPOSE directive needed for stdio-based MCP servers
+
+# Configure proper signal handling for graceful shutdowns
+STOPSIGNAL SIGTERM
+
+# Set the entry point to the MCP server
+ENTRYPOINT ["python", "main.py"]
+
+# Add labels for Docker MCP Toolkit integration
+LABEL org.opencontainers.image.title="Toolkit MCP Server"
+LABEL org.opencontainers.image.description="Essential file operations and utility tools for MCP servers"
+LABEL org.opencontainers.image.vendor="MCP Fleet"
+LABEL org.opencontainers.image.version="2.0.0"
+LABEL mcp.server.name="toolkit"
+LABEL mcp.server.tools="file_operations,utility_tools,common_tools"

@@ -1,17 +1,13 @@
-# Dockerfile for Tides MCP Server
+# Dockerfile for Tides MCP Server (Python)
 # Optimized for Docker Desktop MCP Toolkit
 
-FROM mcp-fleet:base AS tides
+FROM mcp-fleet:python-base AS tides
 
 # Set working directory to the server directory
-WORKDIR /app/servers/tides
+WORKDIR /app/python-servers/tides
 
 # Set resource limits as required by Docker MCP Toolkit
 # CPU limit: 1 core, Memory limit: 2GB (handled by Docker runtime)
-
-# Environment variables for MCP server configuration
-ENV DENO_NO_UPDATE_CHECK=1
-ENV DENO_NO_PROMPT=1
 
 # Create reports directory for file exports
 RUN mkdir -p /app/reports && chown -R root:root /app/reports
@@ -26,13 +22,12 @@ VOLUME ["/app/reports"]
 STOPSIGNAL SIGTERM
 
 # Set the entry point to the MCP server
-# The --allow-all flag is required for MCP servers to access necessary system resources
-ENTRYPOINT ["deno", "run", "--allow-all", "mcp_main.ts"]
+ENTRYPOINT ["python", "main.py"]
 
 # Add labels for Docker MCP Toolkit integration
 LABEL org.opencontainers.image.title="Tides MCP Server"
 LABEL org.opencontainers.image.description="Rhythmic workflow management based on natural tidal patterns"
 LABEL org.opencontainers.image.vendor="MCP Fleet"
-LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.version="2.0.0"
 LABEL mcp.server.name="tides"
 LABEL mcp.server.tools="workflow_management,rhythm_tracking,tide_creation,report_generation"
