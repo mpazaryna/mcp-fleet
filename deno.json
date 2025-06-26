@@ -1,6 +1,7 @@
 {
   "workspace": [
     "./servers/orchestration-framework",
+    "./servers/compass",
     "./servers/tides",
     "./servers/toolkit",
     "./packages/mcp-core",

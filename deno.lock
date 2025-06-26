@@ -463,6 +463,11 @@
       "npm:zod@^3.22.0"
     ],
     "members": {
+      "servers/compass": {
+        "dependencies": [
+          "npm:zod@^3.22.0"
+        ]
+      },
       "servers/orchestration-framework": {
         "dependencies": [
           "jsr:@mizchi/mcp-helper@^0.0.4",
