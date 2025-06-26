@@ -4,7 +4,9 @@
       "Bash(git checkout:*)",
       "Bash(mkdir:*)",
       "Bash(deno test:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
