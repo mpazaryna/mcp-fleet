@@ -4,6 +4,48 @@ All notable changes to MCP Fleet will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.3.0] - 2025-06-26
+
+### Added
+- **Compass MCP Server**: Complete systematic project methodology implementation
+  - 4-phase systematic approach: Exploration → Specification → Execution → Feedback
+  - **Project Management Tools**: `init_project`, `list_projects`, `get_project_status`
+  - **Exploration Tools**: `start_exploration`, `save_exploration_session`, `get_project_context`, `complete_exploration_phase`
+  - **Specification Tools**: `generate_specification`, `list_patterns`, `get_specification_status`
+  - **Execution Tools**: `start_execution`, `list_tasks`, `update_task_status`
+- **Pattern-Based Specifications**: Built-in templates for software, business, and project domains
+  - Software product requirements with user stories and technical specs
+  - Business process analysis with current state and improvement documentation
+  - General project planning with charter, scope, and implementation plans
+- **Context-Aware Task Generation**: AI-assisted breakdown of specifications into actionable tasks
+- **Conversation History Preservation**: Systematic capture of exploration insights as organizational knowledge
+- **Docker Integration**: Full containerization with workspace persistence
+  - `Dockerfile.compass` with optimized resource constraints
+  - Volume mounting to `~/Documents/CompassProjects/` for file persistence
+  - Docker Desktop MCP Toolkit integration with proper workspace handling
+- **Comprehensive Testing**: 35+ test scenarios across unit, integration, and E2E levels
+  - Test-driven development (TDD) implementation for all phases
+  - Complete lifecycle validation with real file artifacts
+  - Integration workflow testing between phases
+
+### Changed
+- **CLAUDE.md**: Updated with comprehensive Compass server documentation
+- **Claude Desktop Config**: Added Compass server with Docker volume mounting
+- **Build System**: Added Compass to Docker build tasks and monorepo commands
+- **Architecture**: Extended MCP Fleet pattern with systematic methodology enforcement
+
+### Technical Implementation
+- **Methodology Enforcement**: Prevents "surface-level shiny object" AI responses through structured phases
+- **Phase Gating**: Must complete exploration before specification, specification before execution
+- **Context Continuity**: Conversation histories preserved across sessions for consistent context
+- **Zod Schema Validation**: Type-safe tool definitions with comprehensive input/output validation
+- **Docker Workspace Fix**: Resolved file persistence issues with COMPASS_WORKSPACE environment variable
+
+### Fixed
+- **Docker Volume Mounting**: Fixed workspace detection to use mounted directories instead of container-internal paths
+- **File Persistence**: Ensured all project files are saved to persistent mounted volumes
+- **Cross-Platform Compatibility**: Proper workspace detection for both native and Docker deployments
+
 ## [0.3.0] - 2024-06-25
 
 ### Added
