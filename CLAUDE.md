@@ -34,7 +34,7 @@ deno test packages/claude-client/tests/
 ## Architecture Overview
 
 ### Core Structure
-- `/servers/` - Two main MCP servers (orchestration-framework, tides)
+- `/servers/` - Three main MCP servers (orchestration-framework, tides, compass)
 - `/packages/` - Three shared libraries (mcp-core, claude-client, common-tools)
 - `/projects/` - Shared workspace for orchestration framework project data
 
@@ -82,6 +82,25 @@ Rhythmic workflow management based on natural tidal patterns for sustainable pro
 - Automatic file organization by flow type and date
 - Docker volume mounting for persistent storage outside containers
 - Reports saved to `~/Documents/TideReports/` when using recommended deployment
+
+### Compass (`/servers/compass/`)
+Systematic project methodology through exploration-to-execution phases. Enforces depth and prevents surface-level AI responses.
+
+**Core Tools:**
+- `init_project` - Initialize new project with structured workspace
+- `start_exploration` - Begin systematic exploration sessions
+- `save_exploration_session` - Preserve conversation context and insights
+- `complete_exploration_phase` - Transition to specification with validation
+- `generate_specification` - Create requirements documents from exploration
+- `start_execution` - Break down specifications into actionable tasks
+- `list_tasks` / `update_task_status` - Track execution progress
+
+**Methodology Features:**
+- **Phase enforcement** - Cannot skip phases, must complete prerequisites
+- **Context preservation** - All conversations and decisions are preserved
+- **Pattern-based specifications** - Professional requirements generation
+- **Task breakdown** - Context-aware execution planning with priorities
+- **File persistence** - Projects stored in structured workspace directories
 
 ## Shared Packages
 
@@ -142,6 +161,7 @@ docker build -t mcp-fleet:base .
 # Build server images
 docker build -t mcp-fleet:orchestration-framework -f Dockerfile.orchestration .
 docker build -t mcp-fleet:tides -f Dockerfile.tides .
+docker build -t mcp-fleet:compass -f Dockerfile.compass .
 
 # Run individual servers
 docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
@@ -150,6 +170,10 @@ docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
 
 docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
   mcp-fleet:tides
+
+docker run \
+  -v "$(pwd)/workspace:/app/workspace" \
+  mcp-fleet:compass
 ```
 
 ### Native Development Setup

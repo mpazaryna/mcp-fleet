@@ -19,7 +19,8 @@ FROM base AS deps
 COPY . .
 RUN deno cache \
     servers/orchestration-framework/mcp_main.ts \
-    servers/tides/mcp_main.ts
+    servers/tides/mcp_main.ts \
+    servers/compass/mcp_main.ts
 
 # Production stage
 FROM base AS production

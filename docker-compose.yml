@@ -82,6 +82,41 @@ services:
       retries: 3
       start_period: 5s
 
+  # Compass MCP Server
+  compass:
+    build:
+      context: .
+      dockerfile: Dockerfile.compass
+    image: mcp-fleet:compass
+    container_name: mcp-compass
+    depends_on:
+      - mcp-fleet-base
+    environment:
+      - DENO_NO_UPDATE_CHECK=1
+      - DENO_NO_PROMPT=1
+    volumes:
+      # Persist workspace directory for project storage
+      - compass-workspace:/app/workspace
+    # Resource limits as required by Docker MCP Toolkit
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # MCP servers typically run in the background
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "deno", "eval", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
   # Toolkit MCP Server
   toolkit:
     build:
@@ -124,6 +159,10 @@ volumes:
   
   # Persistent storage for tide reports
   tides-reports:
+    driver: local
+  
+  # Persistent storage for compass project workspace
+  compass-workspace:
     driver: local
   
   # Persistent storage for toolkit file operations

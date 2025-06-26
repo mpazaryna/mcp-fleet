@@ -1,0 +1,42 @@
+[
+  {
+    "id": "task-1750941660542-1",
+    "title": "Setup development environment",
+    "description": "Initialize project structure, install dependencies, and configure development tools",
+    "status": "pending",
+    "priority": "high",
+    "category": "setup",
+    "estimatedHours": 4,
+    "createdDate": "2025-06-26T12:41:00.542Z"
+  },
+  {
+    "id": "task-1750941660542-4",
+    "title": "Build user interface components",
+    "description": "Create reusable UI components and implement user workflows",
+    "status": "pending",
+    "priority": "medium",
+    "category": "frontend",
+    "estimatedHours": 16,
+    "createdDate": "2025-06-26T12:41:00.542Z"
+  },
+  {
+    "id": "task-1750941660542-5",
+    "title": "Write unit and integration tests",
+    "description": "Implement comprehensive test coverage for all components",
+    "status": "pending",
+    "priority": "medium",
+    "category": "testing",
+    "estimatedHours": 8,
+    "createdDate": "2025-06-26T12:41:00.542Z"
+  },
+  {
+    "id": "task-1750941660542-6",
+    "title": "Create deployment configuration",
+    "description": "Setup CI/CD pipeline and deployment infrastructure",
+    "status": "pending",
+    "priority": "low",
+    "category": "deployment",
+    "estimatedHours": 6,
+    "createdDate": "2025-06-26T12:41:00.542Z"
+  }
+]
