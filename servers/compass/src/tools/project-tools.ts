@@ -1,13 +1,8 @@
 import { z } from "zod";
 import { join } from "https://deno.land/std@0.208.0/path/mod.ts";
 import { exists } from "https://deno.land/std@0.208.0/fs/mod.ts";
-// Temporarily implement writeFile locally until import issues are resolved
-async function writeFile(args: { path: string; content: string }) {
-  const dir = args.path.substring(0, args.path.lastIndexOf("/"));
-  await Deno.mkdir(dir, { recursive: true });
-  await Deno.writeTextFile(args.path, args.content);
-}
 import type { MCPTool } from "@packages/mcp-core/mod.ts";
+import { ProjectManager } from "../managers/project-manager.ts";
 
 // Schema definitions
 const InitProjectInputSchema = z.object({
@@ -111,47 +106,12 @@ export const projectHandlers = {
         };
       }
       
-      // Create project structure
+      // Create project directory first
       await Deno.mkdir(projectPath, { recursive: true });
-      await Deno.mkdir(join(projectPath, "exploration"), { recursive: true });
-      await Deno.mkdir(join(projectPath, "specification"), { recursive: true });
-      await Deno.mkdir(join(projectPath, "execution"), { recursive: true });
-      await Deno.mkdir(join(projectPath, "feedback"), { recursive: true });
       
-      // Create metadata
-      const metadata = {
-        name,
-        created: new Date().toISOString(),
-        currentPhase: "exploration",
-        status: "active",
-        sessionCount: 0,
-      };
-      
-      await writeFile({
-        path: join(projectPath, ".compass.json"),
-        content: JSON.stringify(metadata, null, 2),
-      });
-      
-      // Create initial tasks file
-      const tasksContent = `# ${name} - Project Tasks
-
-## Phase 1: Exploration
-- [ ] Complete initial problem exploration
-
-## Phase 2: Specification
-*Tasks will be generated after exploration completion*
-
-## Phase 3: Execution
-*Tasks will be generated after specification completion*
-
-## Phase 4: Feedback & Learning
-*Tasks will be generated after execution completion*
-`;
-      
-      await writeFile({
-        path: join(projectPath, "tasks.md"),
-        content: tasksContent,
-      });
+      // Use ProjectManager to create structure
+      const manager = new ProjectManager(projectPath);
+      await manager.createProjectStructure(name);
       
       return {
         success: true,
@@ -234,20 +194,32 @@ METHODOLOGY ENFORCEMENT: You must complete exploration before moving to specific
         throw new Error(`Project '${project_name}' not found`);
       }
       
-      const metadata = JSON.parse(await Deno.readTextFile(join(projectPath, ".compass.json")));
+      const manager = new ProjectManager(projectPath);
+      const metadata = await manager.loadMetadata();
       
-      // TODO: Parse tasks from tasks.md
-      const explorationTasks = [
-        { text: "Complete initial problem exploration", completed: false },
-      ];
+      if (!metadata) {
+        throw new Error(`Invalid project metadata for '${project_name}'`);
+      }
+      
+      const tasksData = await manager.parseTasksFile();
+      const status = manager.getCurrentStatus(tasksData.explorationTasks);
+      
+      const incompleteTasks = tasksData.explorationTasks.filter(t => !t.completed);
+      const recommendations = [];
+      
+      if (incompleteTasks.length > 0) {
+        recommendations.push(`Continue exploration: ${incompleteTasks[0].text}`);
+      } else {
+        recommendations.push("Exploration complete - ready for specification phase");
+      }
       
       return {
         project_name,
         current_phase: metadata.currentPhase || "exploration",
-        status_summary: "Exploration phase - Ready to begin",
-        exploration_tasks: explorationTasks,
-        next_action: "start_exploration",
-        recommendations: ["Begin systematic exploration phase"],
+        status_summary: status,
+        exploration_tasks: tasksData.explorationTasks,
+        next_action: incompleteTasks.length > 0 ? "start_exploration" : "generate_specification",
+        recommendations,
       };
     } catch (error) {
       throw error;

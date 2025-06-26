@@ -2,6 +2,7 @@ import { z } from "zod";
 import { join } from "https://deno.land/std@0.208.0/path/mod.ts";
 import { exists } from "https://deno.land/std@0.208.0/fs/mod.ts";
 import type { MCPTool } from "@packages/mcp-core/mod.ts";
+import { ProjectManager } from "../managers/project-manager.ts";
 
 // Temporary local implementations
 async function writeFile(args: { path: string; content: string }) {
