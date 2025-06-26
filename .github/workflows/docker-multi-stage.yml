@@ -1,0 +1,150 @@
+name: Build and Push Python Docker Images (Multi-stage)
+
+on:
+  push:
+    branches: [ python-migration, main ]
+    paths:
+      - 'python-packages/**'
+      - 'python-servers/**'
+      - 'Dockerfile.all-python'
+      - 'pyproject.toml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'python-packages/**'
+      - 'python-servers/**'
+      - 'Dockerfile.all-python'
+      - 'pyproject.toml'
+  workflow_dispatch: # Allow manual triggering
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME_PREFIX: pazland/mcp-fleet
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract metadata for base image
+      id: meta-base
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}-base
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push base image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.all-python
+        target: python-base
+        push: true
+        tags: ${{ steps.meta-base.outputs.tags }}
+        labels: ${{ steps.meta-base.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Extract metadata for tides image
+      id: meta-tides
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}-tides
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push tides image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.all-python
+        target: tides
+        push: true
+        tags: ${{ steps.meta-tides.outputs.tags }}
+        labels: ${{ steps.meta-tides.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Extract metadata for compass image
+      id: meta-compass
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}-compass
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push compass image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.all-python
+        target: compass
+        push: true
+        tags: ${{ steps.meta-compass.outputs.tags }}
+        labels: ${{ steps.meta-compass.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Extract metadata for toolkit image
+      id: meta-toolkit
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}-toolkit
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push toolkit image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.all-python
+        target: toolkit
+        push: true
+        tags: ${{ steps.meta-toolkit.outputs.tags }}
+        labels: ${{ steps.meta-toolkit.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Image digest summary
+      run: |
+        echo "## Docker Images Published 🐳" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Successfully built and pushed the following images:" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- \`${{ env.IMAGE_NAME_PREFIX }}-base:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`${{ env.IMAGE_NAME_PREFIX }}-tides:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`${{ env.IMAGE_NAME_PREFIX }}-compass:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`${{ env.IMAGE_NAME_PREFIX }}-toolkit:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Pull commands:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-base:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-tides:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-compass:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-toolkit:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
