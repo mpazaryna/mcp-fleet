@@ -112,7 +112,7 @@ Deno.test({
   name: "list_patterns returns available specification patterns",
   permissions: { read: true },
   fn: async () => {
-    const result = await specificationHandlers.list_patterns({});
+    const result = await specificationHandlers.list_patterns();
     
     assertEquals(result.success, true);
     assertExists(result.patterns);

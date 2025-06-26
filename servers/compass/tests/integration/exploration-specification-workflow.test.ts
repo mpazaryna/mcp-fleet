@@ -1,4 +1,4 @@
-import { assertEquals, assertExists } from "https://deno.land/std@0.208.0/assert/mod.ts";
+import { assertEquals, assertExists, assert } from "https://deno.land/std@0.208.0/assert/mod.ts";
 import { join } from "https://deno.land/std@0.208.0/path/mod.ts";
 import { exists } from "https://deno.land/std@0.208.0/fs/mod.ts";
 import { projectHandlers } from "../../src/tools/project-tools.ts";
@@ -74,7 +74,7 @@ Deno.test({
       assertEquals(specStatus1.next_action, "generate_specification");
       
       // List available patterns
-      const patternsResult = await specificationHandlers.list_patterns({});
+      const patternsResult = await specificationHandlers.list_patterns();
       
       assertEquals(patternsResult.success, true);
       assertEquals(patternsResult.total > 0, true);
@@ -178,7 +178,7 @@ Deno.test({
       });
       
       assertEquals(specResult.success, false);
-      assertEquals(specResult.error.includes("Exploration phase not completed"), true);
+      assert(specResult.error?.includes("Exploration phase not completed"));
       
       // Check specification status shows not ready
       const specStatus = await specificationHandlers.get_specification_status({

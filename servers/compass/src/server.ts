@@ -2,6 +2,7 @@ import { createMCPServer } from "@packages/mcp-core/mod.ts";
 import { projectTools, projectHandlers } from "./tools/project-tools.ts";
 import { explorationTools, explorationHandlers } from "./tools/exploration-tools.ts";
 import { specificationTools, specificationHandlers } from "./tools/specification-tools.ts";
+import { executionTools, executionHandlers } from "./tools/execution-tools.ts";
 
 const serverInfo = {
   name: "compass",
@@ -15,6 +16,7 @@ export async function createCompassServer() {
     ...projectTools,
     ...explorationTools,
     ...specificationTools,
+    ...executionTools,
   ];
   
   // Combine all handlers
@@ -22,6 +24,7 @@ export async function createCompassServer() {
     ...projectHandlers,
     ...explorationHandlers,
     ...specificationHandlers,
+    ...executionHandlers,
   };
   
   const server = createMCPServer({

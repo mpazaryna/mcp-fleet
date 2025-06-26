@@ -103,8 +103,8 @@ Deno.test({
       
       // Verify update
       const updated = await manager.loadMetadata();
-      assertEquals(updated.sessionCount, 1);
-      assertExists(updated.lastSessionDate);
+      assertEquals(updated?.sessionCount, 1);
+      assertExists(updated?.lastSessionDate);
     } finally {
       await Deno.remove(testDir, { recursive: true });
     }
