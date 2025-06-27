@@ -255,6 +255,13 @@ draft_tools = [
 
 # MCP Tool handlers
 draft_handlers = {
-    "create_draft": lambda content, tags=None, action=None: create_draft(content, tags, action),
-    "create_draft_with_template": lambda template_name, variables=None: create_draft_with_template(template_name, variables)
+    "create_draft": lambda **kwargs: create_draft(
+        kwargs["content"], 
+        kwargs.get("tags"), 
+        kwargs.get("action")
+    ),
+    "create_draft_with_template": lambda **kwargs: create_draft_with_template(
+        kwargs["template_name"], 
+        kwargs.get("variables")
+    )
 }

@@ -118,9 +118,9 @@ file_tools = [
     }
 ]
 
-# MCP Tool handlers
+# MCP Tool handlers  
 file_handlers = {
-    "read_file": lambda file_path: read_file(file_path),
-    "write_file": lambda file_path, content: write_file(file_path, content),
-    "list_directory": lambda directory_path: list_directory(directory_path)
+    "read_file": lambda **kwargs: read_file(kwargs["file_path"]),
+    "write_file": lambda **kwargs: write_file(kwargs["file_path"], kwargs["content"]),
+    "list_directory": lambda **kwargs: list_directory(kwargs["directory_path"])
 }
