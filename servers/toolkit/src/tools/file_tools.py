@@ -49,7 +49,7 @@ file_tools = [
     {
         "name": "read_file",
         "description": "Read the contents of a file",
-        "inputSchema": {
+        "input_schema": {
             "type": "object",
             "properties": {
                 "file_path": {
@@ -58,12 +58,20 @@ file_tools = [
                 }
             },
             "required": ["file_path"]
+        },
+        "output_schema": {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "content": {"type": "string"},
+                "error": {"type": "string"}
+            }
         }
     },
     {
         "name": "write_file",
         "description": "Write content to a file",
-        "inputSchema": {
+        "input_schema": {
             "type": "object",
             "properties": {
                 "file_path": {
@@ -76,12 +84,20 @@ file_tools = [
                 }
             },
             "required": ["file_path", "content"]
+        },
+        "output_schema": {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "message": {"type": "string"},
+                "error": {"type": "string"}
+            }
         }
     },
     {
         "name": "list_directory",
         "description": "List the contents of a directory",
-        "inputSchema": {
+        "input_schema": {
             "type": "object",
             "properties": {
                 "directory_path": {
@@ -90,6 +106,14 @@ file_tools = [
                 }
             },
             "required": ["directory_path"]
+        },
+        "output_schema": {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "items": {"type": "array"},
+                "error": {"type": "string"}
+            }
         }
     }
 ]

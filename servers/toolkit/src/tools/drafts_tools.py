@@ -195,7 +195,7 @@ draft_tools = [
     {
         "name": "create_draft",
         "description": "Create a new draft in the Drafts app with optional tags and actions",
-        "inputSchema": {
+        "input_schema": {
             "type": "object",
             "properties": {
                 "content": {
@@ -213,12 +213,21 @@ draft_tools = [
                 }
             },
             "required": ["content"]
+        },
+        "output_schema": {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "url": {"type": "string"},
+                "message": {"type": "string"},
+                "error": {"type": "string"}
+            }
         }
     },
     {
         "name": "create_draft_with_template",
         "description": "Create a draft using a predefined template with variable substitution",
-        "inputSchema": {
+        "input_schema": {
             "type": "object",
             "properties": {
                 "template_name": {
@@ -231,6 +240,15 @@ draft_tools = [
                 }
             },
             "required": ["template_name"]
+        },
+        "output_schema": {
+            "type": "object",
+            "properties": {
+                "success": {"type": "boolean"},
+                "url": {"type": "string"},
+                "message": {"type": "string"},
+                "error": {"type": "string"}
+            }
         }
     }
 ]
