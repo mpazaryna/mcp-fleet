@@ -254,14 +254,22 @@ draft_tools = [
 ]
 
 # MCP Tool handlers
-draft_handlers = {
-    "create_draft": lambda args: create_draft(
+async def _handle_create_draft(args):
+    """Async handler for create_draft tool"""
+    return create_draft(
         args["content"], 
         args.get("tags"), 
         args.get("action")
-    ),
-    "create_draft_with_template": lambda args: create_draft_with_template(
+    )
+
+async def _handle_create_draft_with_template(args):
+    """Async handler for create_draft_with_template tool"""
+    return create_draft_with_template(
         args["template_name"], 
         args.get("variables")
     )
+
+draft_handlers = {
+    "create_draft": _handle_create_draft,
+    "create_draft_with_template": _handle_create_draft_with_template
 }

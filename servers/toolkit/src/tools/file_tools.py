@@ -119,8 +119,17 @@ file_tools = [
 ]
 
 # MCP Tool handlers  
+async def _handle_read_file(args):
+    return await read_file(args["file_path"])
+
+async def _handle_write_file(args):
+    return await write_file(args["file_path"], args["content"])
+
+async def _handle_list_directory(args):
+    return await list_directory(args["directory_path"])
+
 file_handlers = {
-    "read_file": lambda args: read_file(args["file_path"]),
-    "write_file": lambda args: write_file(args["file_path"], args["content"]),
-    "list_directory": lambda args: list_directory(args["directory_path"])
+    "read_file": _handle_read_file,
+    "write_file": _handle_write_file,
+    "list_directory": _handle_list_directory
 }
