@@ -10,6 +10,7 @@ import sys
 
 from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
 from src.tools.file_tools import file_tools, file_handlers
+from src.tools.drafts_tools import draft_tools, draft_handlers
 
 
 # Configure logging
@@ -31,14 +32,18 @@ async def main():
         server_config = MCPServerConfig(
             name="toolkit",
             version="0.1.0",
-            description="Essential file operations and utility tools for MCP servers"
+            description="Essential file operations and utility tools for MCP servers, including Drafts app integration"
         )
+        
+        # Combine all tools and handlers
+        all_tools = file_tools + draft_tools
+        all_handlers = {**file_handlers, **draft_handlers}
         
         # Create server options
         server_options = MCPServerOptions(
             server_info=server_config,
-            tools=file_tools,
-            handlers=file_handlers
+            tools=all_tools,
+            handlers=all_handlers
         )
         
         # Create the MCP server
