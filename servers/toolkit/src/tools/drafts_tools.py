@@ -203,12 +203,12 @@ draft_tools = [
                     "description": "The text content for the draft"
                 },
                 "tags": {
-                    "type": "array",
+                    "type": ["array", "null"],
                     "items": {"type": "string"},
                     "description": "Optional list of tags to add to the draft"
                 },
                 "action": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "description": "Optional action to run after creating the draft"
                 }
             },
@@ -235,7 +235,7 @@ draft_tools = [
                     "description": "Name of the template to use (daily_note, meeting)"
                 },
                 "variables": {
-                    "type": "object",
+                    "type": ["object", "null"],
                     "description": "Variables to substitute in the template"
                 }
             },
