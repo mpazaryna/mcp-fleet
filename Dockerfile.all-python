@@ -15,11 +15,17 @@ COPY pyproject.toml ./
 COPY python-packages/ ./python-packages/
 COPY python-servers/ ./python-servers/
 
-# Install dependencies
-RUN uv sync --no-dev
+# Install dependencies for the workspace
+RUN uv sync --frozen --no-dev
+
+# Create .pth file for workspace packages to be importable
+RUN python -c "import site; import os; \
+    pth_file = os.path.join(site.getsitepackages()[0], 'mcp-workspace.pth'); \
+    with open(pth_file, 'w') as f: \
+        f.write('/app/python-packages\\n')"
 
 # Set Python path for workspace packages
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/python-packages:/app
 
 # Base stage for MCP servers
 FROM python-base AS mcp-base
@@ -30,7 +36,7 @@ WORKDIR /app/python-servers/tides
 RUN mkdir -p /app/reports && chown -R root:root /app/reports
 VOLUME ["/app/reports"]
 STOPSIGNAL SIGTERM
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["uv", "run", "python", "main.py"]
 LABEL org.opencontainers.image.title="Tides MCP Server"
 LABEL org.opencontainers.image.description="Rhythmic workflow management based on natural tidal patterns"
 LABEL org.opencontainers.image.vendor="MCP Fleet"
@@ -45,7 +51,7 @@ ENV COMPASS_WORKSPACE=/app/workspace
 RUN mkdir -p /app/workspace && chown -R root:root /app/workspace
 VOLUME ["/app/workspace"]
 STOPSIGNAL SIGTERM
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["uv", "run", "python", "main.py"]
 LABEL org.opencontainers.image.title="Compass MCP Server"
 LABEL org.opencontainers.image.description="Systematic project methodology through exploration-to-execution phases"
 LABEL org.opencontainers.image.vendor="MCP Fleet"
@@ -57,7 +63,7 @@ LABEL mcp.server.tools="project_management,exploration,specification,execution,s
 FROM mcp-base AS toolkit
 WORKDIR /app/python-servers/toolkit
 STOPSIGNAL SIGTERM
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["uv", "run", "python", "main.py"]
 LABEL org.opencontainers.image.title="Toolkit MCP Server"
 LABEL org.opencontainers.image.description="Essential file operations and utility tools for MCP servers"
 LABEL org.opencontainers.image.vendor="MCP Fleet"
@@ -72,7 +78,7 @@ ENV OF_WORKSPACE=/app/workspace
 RUN mkdir -p /app/workspace && chown -R root:root /app/workspace
 VOLUME ["/app/workspace"]
 STOPSIGNAL SIGTERM
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["uv", "run", "python", "main.py"]
 LABEL org.opencontainers.image.title="OF (Orchestration Framework) MCP Server"
 LABEL org.opencontainers.image.description="4-phase systematic methodology with template-driven AI guidance"
 LABEL org.opencontainers.image.vendor="MCP Fleet"

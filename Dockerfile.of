@@ -25,7 +25,7 @@ VOLUME ["/app/workspace"]
 STOPSIGNAL SIGTERM
 
 # Set the entry point to the MCP server
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["uv", "run", "python", "main.py"]
 
 # Add labels for Docker MCP Toolkit integration
 LABEL org.opencontainers.image.title="OF (Orchestration Framework) MCP Server"
