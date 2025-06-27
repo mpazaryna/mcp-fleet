@@ -8,6 +8,7 @@ on:
       - 'python-servers/**'
       - 'Dockerfile.all-python'
       - 'pyproject.toml'
+      - '.github/workflows/docker-multi-stage.yml'
   pull_request:
     branches: [ main ]
     paths:
@@ -130,6 +131,28 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
+    - name: Extract metadata for of image
+      id: meta-of
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}-of
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push of image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile.all-python
+        target: of
+        push: true
+        tags: ${{ steps.meta-of.outputs.tags }}
+        labels: ${{ steps.meta-of.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
     - name: Image digest summary
       run: |
         echo "## Docker Images Published 🐳" >> $GITHUB_STEP_SUMMARY
@@ -140,6 +163,7 @@ jobs:
         echo "- \`${{ env.IMAGE_NAME_PREFIX }}-tides:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
         echo "- \`${{ env.IMAGE_NAME_PREFIX }}-compass:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
         echo "- \`${{ env.IMAGE_NAME_PREFIX }}-toolkit:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- \`${{ env.IMAGE_NAME_PREFIX }}-of:${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Pull commands:" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
@@ -147,4 +171,5 @@ jobs:
         echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-tides:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
         echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-compass:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
         echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-toolkit:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "docker pull ${{ env.IMAGE_NAME_PREFIX }}-of:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

@@ -4,6 +4,60 @@ All notable changes to MCP Fleet will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.0.0] - 2025-06-27
+
+### Added
+- **🔥 COMPLETE PYTHON MIGRATION**: Entire codebase migrated from Deno/TypeScript to Python 3.11+ with uv
+  - **Python Monorepo**: Workspace structure with shared packages (mcp_core, claude_client, common_tools)
+  - **uv Package Management**: Fast dependency resolution and environment management
+  - **Async/Await Throughout**: Full async implementation for file I/O and API calls
+
+- **🔮 OF (Orchestration Framework) Server**: Template-driven systematic methodology
+  - **External Markdown Templates**: Prompts and patterns as versionable markdown files outside code
+  - **Generic Template Engine**: YAML frontmatter parsing with Jinja2 variable injection
+  - **Pattern Manager**: Domain-specific specification templates (software, business, personal)
+  - **Prompt Manager**: AI conversation templates with phase-specific context injection
+  - **Template Inheritance**: Composition and extension support for complex templates
+
+- **📋 Template System Features**:
+  - **Business Patterns**: `business_process_analysis.md` with comprehensive workflow documentation
+  - **Software Patterns**: `product_requirement_doc.md`, `learning_new_paradigm.md`
+  - **AI Prompts**: Phase-specific guidance (exploration, specification, execution, flywheel)
+  - **Variable Validation**: Required/optional variable checking with type safety
+  - **Section Mapping**: Automatic exploration insights to pattern section mapping
+
+- **🐳 Docker & CI/CD Improvements**:
+  - **Multi-stage Dockerfile**: Single build file for all Python servers with shared base
+  - **GitHub Actions**: Automated Docker Hub publishing with multi-platform builds
+  - **Template Bundling**: All markdown templates included in Docker images
+  - **Optimized Caching**: GitHub Actions cache for faster builds
+
+- **✅ Comprehensive Testing**: Maintained TDD approach throughout migration
+  - **Template Validation**: Automated testing of markdown template parsing and rendering
+  - **Pattern Rendering**: Full specification generation testing with real variables
+  - **Import System**: Python workspace package testing and validation
+
+### Changed
+- **BREAKING**: Complete migration from Deno to Python runtime
+- **Architecture**: Pydantic models replace TypeScript interfaces for type safety
+- **Dependencies**: httpx replaces @anthropic-ai/sdk for Claude API integration
+- **Package Structure**: Clean separation of packages vs servers in monorepo
+- **Docker Images**: All images now use Python 3.11 base with uv package manager
+
+### Fixed
+- **Docker Dependencies**: Resolved circular dependency issues in multi-stage builds
+- **Authentication**: GitHub Actions Docker Hub publishing with proper credentials
+- **Template Loading**: Async file loading with proper error handling and caching
+- **Import Paths**: Workspace package imports working correctly across all servers
+
+### Technical Details
+- **Runtime**: Python 3.11+ with asyncio throughout
+- **Package Manager**: uv for fast dependency resolution
+- **Schema Validation**: Pydantic models with comprehensive type hints
+- **Template Engine**: Jinja2 with YAML frontmatter parsing
+- **AI Integration**: Anthropic Claude API with retry logic and conversation management
+- **Testing**: pytest with async support and comprehensive coverage
+
 ## [1.3.0] - 2025-06-26
 
 ### Added
