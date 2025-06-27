@@ -14,8 +14,10 @@ from ..storage.tide_storage import TideStorage, CreateTideInput, ListTidesFilter
 logger = logging.getLogger(__name__)
 
 
-# Initialize storage
-tide_storage = TideStorage("./tides_data")
+# Initialize storage (use mounted volume in Docker or local directory for development)
+import os
+storage_path = os.getenv("TIDES_STORAGE_PATH", "./tides_data")
+tide_storage = TideStorage(storage_path)
 
 
 # Schema definitions
