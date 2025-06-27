@@ -1,107 +1,167 @@
-# MCP Fleet - Deno Monorepo
+# MCP Fleet - Python Monorepo
 
-A Deno-based monorepo hosting multiple MCP (Model Context Protocol) servers with shared functionality.
+A Python-based monorepo hosting multiple MCP (Model Context Protocol) servers with shared functionality for AI-assisted project management and productivity workflows.
 
 ## Structure
 
 ```
 ├── servers/                    # MCP servers
-│   ├── orchestration-framework/  # Orchestration Framework MCP server
-│   └── tides/                   # Tides MCP server
-├── packages/                   # Shared libraries
-│   ├── mcp-core/               # Core MCP functionality
-│   ├── claude-client/          # Anthropic API client
-│   └── common-tools/           # Shared MCP tools
-└── projects/                   # Orchestration projects (shared data)
+│   ├── tides/                 # Rhythmic workflow management
+│   ├── compass/               # Systematic project methodology
+│   └── toolkit/               # Essential file operations and utilities
+├── packages/                  # Shared libraries
+│   ├── mcp_core/              # Core MCP functionality
+│   ├── claude_client/         # Anthropic API client
+│   └── common_tools/          # Shared MCP tools
+└── tests/                     # Comprehensive test suite
 ```
+
+## Why Monorepo
+
+MCP Fleet uses a monorepo architecture following the same proven pattern as enterprise-grade implementations like Cloudflare's MCP servers:
+
+1. **Shared Infrastructure**: Common MCP protocol handling, utilities
+2. **Coordinated Development**: Single repo for easier testing and CI/CD  
+3. **Independent Deployment**: Each server can be deployed/versioned separately
+4. **Workspace Benefits**: Dependency resolution across the entire ecosystem
 
 ## Quick Start
 
 ### Development
 
 ```bash
-# Install Deno (if not already installed)
-curl -fsSL https://deno.land/install.sh | sh
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Sync dependencies
+uv sync
 
 # Run tests for all packages and servers
-deno task test
+uv run pytest
 
-# Run specific server
-cd servers/orchestration-framework
-deno task start
+# Run specific server tests
+uv run pytest tests/servers/tides/
 
 # Format code
-deno task fmt
+uv run black .
 
 # Lint code
-deno task lint
+uv run ruff check .
 
 # Type check
-deno task check
+uv run mypy .
 ```
 
-### Adding a New Server
+### Docker Deployment
 
-1. Create directory: `mkdir -p servers/your-server/{src,tests}`
-2. Add to workspace in root `deno.json`
-3. Create `servers/your-server/deno.json` with server config
-4. Implement `servers/your-server/mcp_main.ts`
+```bash
+# Build all servers
+docker build -f Dockerfile.all-python --target tides -t mcp-fleet:tides .
+docker build -f Dockerfile.all-python --target compass -t mcp-fleet:compass .
+docker build -f Dockerfile.all-python --target toolkit -t mcp-fleet:toolkit .
+
+# Run individual server
+docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" mcp-fleet:tides
+```
 
 ## Servers
 
-### Orchestration Framework
-
-A systematic methodology for knowledge work that combines human strategic thinking with AI execution capabilities.
-
-[Documentation](./servers/orchestration-framework/README.md)
-
 ### Tides
 
-Coming soon - a new MCP server for tidal workflow management.
+Rhythmic workflow management based on natural tidal patterns for sustainable productivity cycles.
+
+**Features:**
+- Create tidal workflows for different time scales
+- Flow session management with intensity control
+- Report generation (JSON, Markdown, CSV)
+- Persistent storage with Docker volume mounting
+
+### Compass
+
+Systematic project methodology through exploration-to-execution phases. Enforces depth and prevents surface-level AI responses.
+
+**Features:**
+- 4-phase methodology: Exploration → Specification → Execution → Feedback
+- Context preservation and conversation history
+- Pattern-based requirements generation
+- Task breakdown with priority management
+
+### Toolkit
+
+Essential file operations and utility tools for MCP servers.
+
+**Features:**
+- File I/O operations (read, write, create, delete)
+- Directory management and listing
+- Shared infrastructure for other servers
 
 ## Packages
 
-### @packages/mcp-core
+### mcp_core
 
 Core MCP server functionality including:
-- Server creation factory
-- Transport utilities (stdio, socket)
-- Error handling middleware
-- Common MCP tool patterns
+- MCP server creation factory
+- Transport utilities (stdio)
+- Type-safe tool definition helpers
+- Standardized error handling patterns
 
-### @packages/claude-client
+### claude_client
 
-Shared Anthropic Claude API client with:
-- Retry logic and rate limiting
-- Streaming response support
+Enhanced Anthropic Claude API client with:
+- Retry logic and error recovery
 - Conversation management
-- Multiple model support
+- Streaming response support
+- Rate limiting
 
-### @packages/common-tools
+### common_tools
 
 Reusable MCP tools:
-- File operations (read, write, list)
-- Project discovery
-- Git operations
-- Directory management
+- File operations (read, write, list directories)
+- Git operations and project discovery
+- Shared utilities used across servers
 
 ## Testing
 
 ```bash
 # Run all tests
-deno task test
+uv run pytest
 
 # Run package tests only
-deno task test:packages
+uv run pytest tests/packages/
 
 # Run server tests only
-deno task test:servers
+uv run pytest tests/servers/
 
-# Run specific package tests
-deno test packages/mcp-core/
+# Run specific tests with coverage
+uv run pytest tests/servers/tides/ --cov=servers/tides
 
-# Run with coverage
-deno test --coverage
+# Run integration tests
+uv run pytest tests/servers/tides/test_mcp_integration.py
+```
+
+## Environment Setup
+
+Requires `ANTHROPIC_API_KEY` environment variable for Claude API integration.
+
+### Claude Desktop Integration
+
+Add to your Claude Desktop configuration:
+
+```json
+{
+  "mcpServers": {
+    "tides": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "--name", "tides-mcp-session",
+        "-e", "ANTHROPIC_API_KEY",
+        "-v", "/Users/your-username/Documents/TideReports:/app/reports",
+        "pazland/mcp-fleet-tides:main"
+      ]
+    }
+  }
+}
 ```
 
 ## Contributing
@@ -109,9 +169,9 @@ deno test --coverage
 1. Fork the repository
 2. Create your feature branch
 3. Make changes following the existing patterns
-4. Ensure tests pass
+4. Ensure tests pass: `uv run pytest`
 5. Submit a pull request
 
 ## License
 
-MIT# Trigger workflow
+MIT
