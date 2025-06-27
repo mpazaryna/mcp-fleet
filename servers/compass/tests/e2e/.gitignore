@@ -1,3 +1,0 @@
-# Ignore E2E test artifacts except the sample project for documentation
-test-workspace/*
-!test-workspace/sample-ecommerce-platform/
