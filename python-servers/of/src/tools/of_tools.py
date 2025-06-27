@@ -8,7 +8,13 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from mcp_core.types import MCPTool
+# Simple tool definition to replace MCPTool
+class MCPTool:
+    def __init__(self, name: str, description: str, input_schema: dict, output_schema: dict):
+        self.name = name
+        self.description = description
+        self.input_schema = input_schema
+        self.output_schema = output_schema
 from ..workspace_manager import WorkspaceManager, ProjectData
 
 

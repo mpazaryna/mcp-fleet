@@ -9,22 +9,20 @@ services:
     image: mcp-fleet:python-base
     command: ["echo", "Python base image built successfully"]
 
-  # Orchestration Framework MCP Server
-  orchestration-framework:
+  # Orchestration Framework (OF) MCP Server
+  of:
     build:
       context: .
-      dockerfile: Dockerfile.orchestration
-    image: mcp-fleet:orchestration-framework
-    container_name: mcp-orchestration-framework
+      dockerfile: Dockerfile.of
+    image: mcp-fleet:of
+    container_name: mcp-of
     depends_on:
-      - mcp-fleet-base
+      - mcp-fleet-python-base
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - DENO_NO_UPDATE_CHECK=1
-      - DENO_NO_PROMPT=1
     volumes:
       # Persist projects directory for orchestration framework
-      - orchestration-projects:/app/projects
+      - of-projects:/app/projects
     # Resource limits as required by Docker MCP Toolkit
     deploy:
       resources:
@@ -144,8 +142,8 @@ services:
       start_period: 5s
 
 volumes:
-  # Persistent storage for orchestration framework projects
-  orchestration-projects:
+  # Persistent storage for OF (orchestration framework) projects
+  of-projects:
     driver: local
   
   # Persistent storage for tide reports

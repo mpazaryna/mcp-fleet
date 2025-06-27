@@ -4,21 +4,12 @@ version = "0.1.0"
 description = "Orchestration Framework - 4-phase systematic methodology server"
 requires-python = ">=3.11"
 dependencies = [
-    "mcp-core",
-    "claude-client", 
-    "common-tools",
     "mcp>=1.0.0",
-    "anthropic>=0.34.0",
     "pydantic>=2.0.0",
     "aiofiles>=23.2.0",
     "pyyaml>=6.0",
     "jinja2>=3.1.0",
 ]
-
-[tool.uv.sources]
-mcp-core = { workspace = true }
-claude-client = { workspace = true }
-common-tools = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

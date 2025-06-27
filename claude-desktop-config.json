@@ -40,18 +40,18 @@
         "mcp-fleet:compass"
       ]
     },
-    "orchestration-framework": {
+    "of": {
       "command": "docker",
       "args": [
         "run",
         "--rm",
         "-i",
-        "--name", "orchestration-mcp-session",
+        "--name", "of-mcp-session",
         "-e", "ANTHROPIC_API_KEY",
         "-v", "${HOME}/Documents/OrchestrationProjects:/app/projects",
         "--cpus=1",
         "--memory=2g",
-        "mcp-fleet:orchestration-framework"
+        "mcp-fleet:of"
       ]
     }
   }

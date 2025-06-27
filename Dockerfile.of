@@ -1,13 +1,19 @@
 # Dockerfile for OF (Orchestration Framework) MCP Server (Python)
-# Optimized for Docker Desktop MCP Toolkit
+# Standalone server with no shared dependencies
 
-FROM mcp-fleet:python-base AS of
+FROM python:3.11-slim AS of
 
-# Set working directory to the server directory
-WORKDIR /app/python-servers/of
+# Install uv for fast package management
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
-# Set resource limits as required by Docker MCP Toolkit
-# CPU limit: 1 core, Memory limit: 2GB (handled by Docker runtime)
+# Set working directory
+WORKDIR /app
+
+# Copy only the OF server files
+COPY python-servers/of/ ./
+
+# Install only the OF dependencies (no workspace dependencies)
+RUN uv sync --frozen --no-dev
 
 # Environment variables for MCP server configuration
 ENV OF_WORKSPACE=/app/workspace
