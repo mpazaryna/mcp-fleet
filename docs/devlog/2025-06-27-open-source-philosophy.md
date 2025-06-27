@@ -45,7 +45,7 @@ Benefits:
 **Make public**: Technical architecture, build patterns, clean code practices
 **Keep private**: Product insights, business applications, specific domain problem solutions
 
-Think Tesla: Open-sourced patents, kept manufacturing expertise and market execution.
+Think Google with Android: Open-sourced the platform, kept the services ecosystem and data advantage.
 
 ## Application to MCP Fleet
 - **Open source**: Monorepo structure, Docker patterns, Python workspace setup
