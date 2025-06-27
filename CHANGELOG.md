@@ -4,6 +4,43 @@ All notable changes to MCP Fleet will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [2.1.0] - 2025-06-27
+
+### Added
+- Clean folder structure with standardized naming conventions
+  - **packages/**: Renamed from python-packages for cleaner structure
+  - **servers/**: Renamed from python-servers for consistency
+  - Removed "python-" prefixes from all folder names for better navigation
+
+### Changed
+- **BREAKING**: Folder structure reorganization affects local development setup
+- **Docker Configuration**: Updated Dockerfile.all-python with new folder paths
+- **Workspace Configuration**: Updated pyproject.toml workspace members
+- **Development Configs**: Updated claude-desktop-config-local.json paths
+- **Test Imports**: Updated all test files to use new folder structure
+
+### Removed
+- **OF (Orchestration Framework) Server**: Removed problematic server implementation
+  - Eliminated complex template engine causing deployment issues
+  - Simplified codebase to focus on stable servers (tides, compass, toolkit)
+  - Removed 50+ template files and related Python cache artifacts
+- **Redundant Docker Files**: Cleaned up deployment infrastructure
+  - Removed docker-compose.yml (redundant with Dockerfile.all-python)
+  - Removed individual server Dockerfiles (consolidated to multi-stage build)
+  - Removed deploy-tides-mcp.sh script (CI/CD handles publishing)
+
+### Fixed
+- **Build System**: Streamlined Docker builds to single multi-stage Dockerfile
+- **CI/CD Pipeline**: Verified GitHub Actions still builds correctly after restructure
+- **Python Cache**: Removed all __pycache__ directories from version control
+- **Import Paths**: Fixed test file imports to work with new folder structure
+
+### Technical Details
+- **Workspace Structure**: Explicit server listing in pyproject.toml for better control
+- **Docker Build**: Multi-stage builds for tides, compass, and toolkit servers only
+- **GitHub Actions**: Continues to publish to Docker Hub with new folder structure
+- **Python Paths**: Updated PYTHONPATH configurations in all development configs
+
 ## [2.0.0] - 2025-06-27
 
 ### Added
