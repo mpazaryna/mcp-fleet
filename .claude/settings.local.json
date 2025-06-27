@@ -12,7 +12,8 @@
       "Bash(uv:*)",
       "Bash(rm:*)",
       "Bash(mv:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(git reset:*)"
     ],
     "deny": []
   }

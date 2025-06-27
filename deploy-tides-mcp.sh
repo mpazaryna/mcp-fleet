@@ -18,15 +18,9 @@ if [ -z "$ANTHROPIC_API_KEY" ]; then
     exit 1
 fi
 
-# Build base image if it doesn't exist
-if ! docker image inspect mcp-fleet:base >/dev/null 2>&1; then
-    echo "📦 Building base image..."
-    docker build -t mcp-fleet:base .
-fi
-
-# Build Tides server with MCP-friendly tag
+# Build Tides server with MCP-friendly tag using multi-stage Dockerfile
 echo "🌊 Building Tides MCP server..."
-docker build -t mcp/tides:latest -f Dockerfile.tides .
+docker build -t mcp/tides:latest -f Dockerfile.all-python --target tides .
 
 # Stop existing container if running
 if docker ps -q -f name=tides-mcp >/dev/null 2>&1; then
