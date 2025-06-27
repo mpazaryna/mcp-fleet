@@ -7,13 +7,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 # Set working directory
 WORKDIR /app
 
-# Copy workspace configuration
-COPY pyproject.toml ./
+# Copy workspace configuration and lock file
+COPY pyproject.toml uv.lock ./
 COPY python-packages/ ./python-packages/
 COPY python-servers/ ./python-servers/
 
 # Install dependencies
-RUN uv sync --no-dev
+RUN uv sync --frozen --no-dev
 
 # Set Python path for workspace packages
 ENV PYTHONPATH=/app
