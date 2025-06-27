@@ -12,17 +12,14 @@ The servers are designed to prevent common pitfalls of AI-assisted work: superfi
 
 ### 🌊 [Tides](./servers/tides/) - Rhythmic Workflow Management
 Brings natural rhythm and sustainability to productivity workflows, inspired by tidal patterns in nature.
-
 Tides helps create balanced work cycles that prevent burnout while maintaining consistent progress. [Learn more →](./servers/tides/)
 
 ### 🧭 [Compass](./servers/compass/) - Systematic Project Methodology  
 Guides projects through a 4-phase methodology designed to prevent superficial work and ensure deep, meaningful outcomes.
-
 Compass enforces thorough exploration before execution, creating lasting value rather than quick wins. [Learn more →](./servers/compass/)
 
 ### 🛠️ [Toolkit](./servers/toolkit/) - Essential Infrastructure Services
 Provides fundamental file operations and utilities needed by other MCP servers and workflows.
-
 Toolkit serves as shared infrastructure, handling common tasks so domain-specific servers can focus on their core functionality. [Learn more →](./servers/toolkit/)
 
 ## Architecture
@@ -51,12 +48,6 @@ Each server is designed to work independently through Claude Desktop's MCP integ
 - [Claude Desktop](https://claude.ai/download) (for MCP integration)
 - Docker (for containerized deployment)
 - `ANTHROPIC_API_KEY` environment variable (for AI features)
-
-### Installation
-Detailed installation and configuration instructions are available in each server's individual README:
-- [Tides Setup](./servers/tides/#getting-started)
-- [Compass Setup](./servers/compass/#getting-started)  
-- [Toolkit Setup](./servers/toolkit/#getting-started)
 
 ## Use Cases
 

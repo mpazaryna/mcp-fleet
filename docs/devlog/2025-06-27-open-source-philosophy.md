@@ -5,9 +5,6 @@ Had a deep conversation about whether to make MCP Fleet public and how open sour
 
 ## Key Insights
 
-### The Moat Question
-Discussed whether keeping code private creates a protective "moat" around intellectual property in the age of AI coding assistants.
-
 **Traditional moats are weakening:**
 - Code patterns and architectures can be reverse-engineered by AI
 - Technical implementation is becoming commoditized
@@ -39,7 +36,7 @@ Benefits:
 - Others can see clean patterns and architectural decisions
 - Portfolio effect for thinking and execution
 - Inspiration for AI coding learners
-- **But maintain full creative control**
+- But maintain full creative control
 
 ## Decision Framework
 **Make public**: Technical architecture, build patterns, clean code practices
@@ -52,8 +49,6 @@ Think Google with Android: Open-sourced the platform, kept the services ecosyste
 - **The real value**: Understanding of productivity workflows, systematic methodology insights, execution discipline
 
 ## Philosophy
-In the AI era, the constraint shifts from implementation capacity to creative vision. Vision is inherently personal.
-
-GitHub becomes less about collaboration, more about knowledge sharing and technique demonstration.
+In the AI era, the constraint shifts from implementation capacity to creative vision. Vision is inherently personal. GitHub becomes less about collaboration, more about knowledge sharing and technique demonstration.
 
 Not selfish - just recognizing that the bottleneck has fundamentally changed.
