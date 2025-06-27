@@ -10,26 +10,26 @@ The recommended development workflow uses pre-built images from Docker Hub to en
 # Set your API key
 export ANTHROPIC_API_KEY="your-api-key-here"
 
-# Pull latest Python images
-docker pull pazland/mcp-fleet-tides:latest
-docker pull pazland/mcp-fleet-compass:latest  
-docker pull pazland/mcp-fleet-toolkit:latest
-docker pull pazland/mcp-fleet-of:latest
+# Pull Python images (use branch tag until merged to main)
+docker pull pazland/mcp-fleet-tides:python-migration
+docker pull pazland/mcp-fleet-compass:python-migration  
+docker pull pazland/mcp-fleet-toolkit:python-migration
+docker pull pazland/mcp-fleet-of:python-migration
 
 # Test individual servers
 docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
   -v "$(pwd)/workspace:/app/workspace" \
-  pazland/mcp-fleet-of:latest
+  pazland/mcp-fleet-of:python-migration
 
 docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
   -v "$(pwd)/reports:/app/reports" \
-  pazland/mcp-fleet-tides:latest
+  pazland/mcp-fleet-tides:python-migration
 
 docker run -v "$(pwd)/workspace:/app/workspace" \
-  pazland/mcp-fleet-compass:latest
+  pazland/mcp-fleet-compass:python-migration
 
 docker run -v "$(pwd)/data:/app/data" \
-  pazland/mcp-fleet-toolkit:latest
+  pazland/mcp-fleet-toolkit:python-migration
 ```
 
 ### Development Testing Commands
@@ -42,26 +42,26 @@ Create these convenience scripts for rapid testing:
 docker run --rm -it \
   -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
   -v "$(pwd)/workspace:/app/workspace" \
-  pazland/mcp-fleet-of:latest
+  pazland/mcp-fleet-of:python-migration
 
 # test-tides.sh  
 #!/bin/bash
 docker run --rm -it \
   -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
   -v "$(pwd)/reports:/app/reports" \
-  pazland/mcp-fleet-tides:latest
+  pazland/mcp-fleet-tides:python-migration
 
 # test-compass.sh
 #!/bin/bash
 docker run --rm -it \
   -v "$(pwd)/workspace:/app/workspace" \
-  pazland/mcp-fleet-compass:latest
+  pazland/mcp-fleet-compass:python-migration
 
 # test-toolkit.sh
 #!/bin/bash
 docker run --rm -it \
   -v "$(pwd)/data:/app/data" \
-  pazland/mcp-fleet-toolkit:latest
+  pazland/mcp-fleet-toolkit:python-migration
 ```
 
 ### Claude Desktop Configuration

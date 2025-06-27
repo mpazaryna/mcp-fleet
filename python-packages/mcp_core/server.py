@@ -23,35 +23,32 @@ def create_mcp_server(options: MCPServerOptions) -> Server:
     # Create the MCP server
     server = Server(server_info.name)
     
-    # Convert tools to MCP Tool format and register handlers
-    for tool in tools:
-        mcp_tool = Tool(
-            name=tool.name,
-            description=tool.description,
-            inputSchema=tool.input_schema
-        )
-        
-        # Get the handler for this tool
-        if tool.name in handlers:
-            handler = handlers[tool.name]
-            
-            # Wrap handler with error handling
-            async def wrapped_handler(arguments: Dict[str, Any], 
-                                     tool_name: str = tool.name,
-                                     original_handler: Any = handler) -> Any:
-                try:
-                    result = await original_handler(arguments)
-                    return result
-                except Exception as error:
-                    error_message = str(error)
-                    logger.error(f"[MCP Server] Error in {tool_name}: {error_message}")
-                    raise error
-            
-            # Register the tool and handler with the server
-            @server.call_tool()
-            async def handle_tool_call(name: str, arguments: Dict[str, Any]) -> Any:
-                if name == tool.name:
-                    return await wrapped_handler(arguments)
+    # Register the tool call handler
+    @server.call_tool()
+    async def handle_tool_call(name: str, arguments: Dict[str, Any]) -> Any:
+        if name in handlers:
+            handler = handlers[name]
+            try:
+                result = await handler(arguments)
+                return result
+            except Exception as error:
+                error_message = str(error)
+                logger.error(f"[MCP Server] Error in {name}: {error_message}")
+                raise error
+        else:
+            raise ValueError(f"Unknown tool: {name}")
+    
+    # Register all tools
+    @server.list_tools()
+    async def list_tools() -> list[Tool]:
+        return [
+            Tool(
+                name=tool.name,
+                description=tool.description,
+                inputSchema=tool.input_schema
+            )
+            for tool in tools
+        ]
     
     return server
 
