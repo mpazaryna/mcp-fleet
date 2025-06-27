@@ -2,8 +2,10 @@
 
 [tool.uv.workspace]
 members = [
-    "python-packages/*",
-    "python-servers/*"
+    "packages/*",
+    "servers/tides",
+    "servers/compass", 
+    "servers/toolkit"
 ]
 
 [tool.uv]

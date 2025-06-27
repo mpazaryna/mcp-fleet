@@ -12,21 +12,21 @@ WORKDIR /app
 
 # Copy workspace configuration and lock file
 COPY pyproject.toml uv.lock ./
-COPY python-packages/ ./python-packages/
-COPY python-servers/ ./python-servers/
+COPY packages/ ./packages/
+COPY servers/ ./servers/
 
 # Install dependencies for the workspace
 RUN uv sync --frozen --no-dev
 
 # Set Python path for workspace packages
-ENV PYTHONPATH=/app/python-packages:/app/python-servers:/app
+ENV PYTHONPATH=/app/packages:/app/servers:/app
 
 # Base stage for MCP servers
 FROM python-base AS mcp-base
 
 # Tides MCP Server
 FROM mcp-base AS tides
-WORKDIR /app/python-servers/tides
+WORKDIR /app/servers/tides
 RUN mkdir -p /app/reports && chown -R root:root /app/reports
 VOLUME ["/app/reports"]
 STOPSIGNAL SIGTERM
@@ -40,7 +40,7 @@ LABEL mcp.server.tools="workflow_management,rhythm_tracking,tide_creation,report
 
 # Compass MCP Server  
 FROM mcp-base AS compass
-WORKDIR /app/python-servers/compass
+WORKDIR /app/servers/compass
 ENV COMPASS_WORKSPACE=/app/workspace
 RUN mkdir -p /app/workspace && chown -R root:root /app/workspace
 VOLUME ["/app/workspace"]
@@ -55,7 +55,7 @@ LABEL mcp.server.tools="project_management,exploration,specification,execution,s
 
 # Toolkit MCP Server
 FROM mcp-base AS toolkit
-WORKDIR /app/python-servers/toolkit
+WORKDIR /app/servers/toolkit
 STOPSIGNAL SIGTERM
 ENTRYPOINT ["uv", "run", "python", "main.py"]
 LABEL org.opencontainers.image.title="Toolkit MCP Server"
@@ -65,17 +65,3 @@ LABEL org.opencontainers.image.version="2.0.0"
 LABEL mcp.server.name="toolkit"
 LABEL mcp.server.tools="file_operations,utility_tools,common_tools"
 
-# OF (Orchestration Framework) MCP Server
-FROM mcp-base AS of
-WORKDIR /app/python-servers/of
-ENV OF_WORKSPACE=/app/workspace
-RUN mkdir -p /app/workspace && chown -R root:root /app/workspace
-VOLUME ["/app/workspace"]
-STOPSIGNAL SIGTERM
-ENTRYPOINT ["uv", "run", "python", "main.py"]
-LABEL org.opencontainers.image.title="OF (Orchestration Framework) MCP Server"
-LABEL org.opencontainers.image.description="4-phase systematic methodology with template-driven AI guidance"
-LABEL org.opencontainers.image.vendor="MCP Fleet"
-LABEL org.opencontainers.image.version="2.0.0"
-LABEL mcp.server.name="of"
-LABEL mcp.server.tools="project_management,systematic_methodology,template_engine,pattern_management,ai_prompts"

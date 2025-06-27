@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, patch, MagicMock
 # Add the project root to the path
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
-sys.path.insert(0, str(project_root / "python-servers" / "tides"))
-sys.path.insert(0, str(project_root / "python-packages"))
+sys.path.insert(0, str(project_root / "servers" / "tides"))
+sys.path.insert(0, str(project_root / "packages"))
 
 from mcp_core.server import create_mcp_server
 from mcp_core.types import MCPServerOptions, MCPServerConfig

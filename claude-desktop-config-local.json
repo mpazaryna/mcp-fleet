@@ -2,37 +2,27 @@
   "mcpServers": {
     "tides": {
       "command": "uv",
-      "args": ["run", "python", "python-servers/tides/main.py"],
+      "args": ["run", "python", "servers/tides/main.py"],
       "cwd": "/Users/mpaz/workspace/mcp-fleet",
       "env": {
         "ANTHROPIC_API_KEY": "",
-        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/python-packages:/Users/mpaz/workspace/mcp-fleet/python-servers"
+        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/packages:/Users/mpaz/workspace/mcp-fleet/servers"
       }
     },
     "toolkit": {
       "command": "uv",
-      "args": ["run", "python", "python-servers/toolkit/main.py"],
+      "args": ["run", "python", "servers/toolkit/main.py"],
       "cwd": "/Users/mpaz/workspace/mcp-fleet",
       "env": {
-        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/python-packages:/Users/mpaz/workspace/mcp-fleet/python-servers"
+        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/packages:/Users/mpaz/workspace/mcp-fleet/servers"
       }
     },
     "compass": {
       "command": "uv",
-      "args": ["run", "python", "python-servers/compass/main.py"],
+      "args": ["run", "python", "servers/compass/main.py"],
       "cwd": "/Users/mpaz/workspace/mcp-fleet",
       "env": {
-        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/python-packages:/Users/mpaz/workspace/mcp-fleet/python-servers"
+        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/packages:/Users/mpaz/workspace/mcp-fleet/servers"
       }
-    },
-    "of": {
-      "command": "uv",
-      "args": ["run", "python", "python-servers/of/main.py"],
-      "cwd": "/Users/mpaz/workspace/mcp-fleet",
-      "env": {
-        "ANTHROPIC_API_KEY": "",
-        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/python-packages:/Users/mpaz/workspace/mcp-fleet/python-servers"
-      }
-    }
-  }
+    }  }
 }

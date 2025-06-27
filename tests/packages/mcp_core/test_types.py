@@ -6,9 +6,9 @@ import sys
 from pathlib import Path
 from pydantic import ValidationError
 
-# Add python-packages to path for testing
+# Add packages to path for testing
 root_dir = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(root_dir / "python-packages"))
+sys.path.insert(0, str(root_dir / "packages"))
 
 from mcp_core.types import MCPServerConfig, MCPTool, MCPServerOptions
 
