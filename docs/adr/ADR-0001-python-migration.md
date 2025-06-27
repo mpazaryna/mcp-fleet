@@ -9,6 +9,7 @@
 MCP Fleet was originally implemented in Deno/TypeScript but needed to be migrated to Python for better ecosystem alignment and development velocity.
 
 Key factors:
+- **Docker Hub publishing**: Python ecosystem has established patterns for automated Docker publishing via GitHub Actions
 - Python ecosystem has stronger AI/ML library support
 - Better alignment with MCP community (many examples in Python)
 - Simpler dependency management with uv
