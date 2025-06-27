@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 
 from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
+from src.tools.of_tools import of_tools, of_handlers
 
 # Configure logging
 logging.basicConfig(
@@ -34,12 +35,11 @@ async def main():
             description="4-phase systematic methodology with template-driven AI guidance"
         )
         
-        # For now, create a minimal server without tools
-        # TODO: Add proper MCP tools once we implement the project manager
+        # Create server options with OF tools
         server_options = MCPServerOptions(
             server_info=server_config,
-            tools=[],
-            handlers={}
+            tools=of_tools,
+            handlers=of_handlers
         )
         
         # Create the MCP server

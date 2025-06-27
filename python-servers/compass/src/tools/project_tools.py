@@ -3,6 +3,7 @@ Project management tools for Compass server
 """
 import json
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
@@ -15,12 +16,15 @@ from ..managers.project_manager import ProjectManager, ProjectMetadata
 
 logger = logging.getLogger(__name__)
 
+# Get workspace path from environment or use default
+DEFAULT_WORKSPACE = os.getenv("COMPASS_WORKSPACE", "./workspace")
+
 
 # Schema definitions
 class InitProjectInputSchema(BaseModel):
     """Schema for initializing a project"""
     name: str = Field(description="Name of the project to initialize")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class InitProjectOutputSchema(BaseModel):
@@ -43,7 +47,7 @@ class ProjectSummary(BaseModel):
 
 class ListProjectsInputSchema(BaseModel):
     """Schema for listing projects"""
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class ListProjectsOutputSchema(BaseModel):
@@ -61,7 +65,7 @@ class TaskSummary(BaseModel):
 class GetProjectStatusInputSchema(BaseModel):
     """Schema for getting project status"""
     project_name: str = Field(description="Name of the project")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class GetProjectStatusOutputSchema(BaseModel):

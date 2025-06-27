@@ -2,6 +2,7 @@
 Exploration phase tools for Compass server
 """
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
@@ -14,13 +15,16 @@ from ..managers.project_manager import ProjectManager, Task
 
 logger = logging.getLogger(__name__)
 
+# Get workspace path from environment or use default
+DEFAULT_WORKSPACE = os.getenv("COMPASS_WORKSPACE", "./workspace")
+
 
 # Schema definitions
 class StartExplorationInputSchema(BaseModel):
     """Schema for starting exploration"""
     project_name: str = Field(description="Project name")
     focus_area: Optional[str] = Field(default=None, description="Specific area to explore")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class StartExplorationOutputSchema(BaseModel):
@@ -38,7 +42,7 @@ class SaveExplorationSessionInputSchema(BaseModel):
     project_name: str = Field(description="Project name")
     conversation_content: str = Field(description="The exploration conversation content")
     session_summary: Optional[str] = Field(default=None, description="Optional summary of the session")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class SaveExplorationSessionOutputSchema(BaseModel):
@@ -54,7 +58,7 @@ class SaveExplorationSessionOutputSchema(BaseModel):
 class GetProjectContextInputSchema(BaseModel):
     """Schema for getting project context"""
     project_name: str = Field(description="Project name")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class GetProjectContextOutputSchema(BaseModel):
@@ -70,7 +74,7 @@ class CompleteExplorationPhaseInputSchema(BaseModel):
     """Schema for completing exploration phase"""
     project_name: str = Field(description="Project name")
     completion_summary: str = Field(description="Summary of exploration findings")
-    projects_dir: Optional[str] = Field(default="./workspace", description="Projects directory")
+    projects_dir: Optional[str] = Field(default=DEFAULT_WORKSPACE, description="Projects directory")
 
 
 class CompleteExplorationPhaseOutputSchema(BaseModel):
