@@ -1,176 +1,91 @@
-# MCP Fleet - Python Monorepo
+# MCP Fleet - Productivity-Focused AI Servers
 
-A Python-based monorepo hosting multiple MCP (Model Context Protocol) servers with shared functionality for AI-assisted project management and productivity workflows.
+A collection of Model Context Protocol (MCP) servers designed to enhance AI-assisted productivity workflows. Each server addresses a specific aspect of knowledge work - from sustainable work rhythms to systematic project management.
 
-## Structure
+## Philosophy
 
+MCP Fleet embraces a philosophy of **systematic, sustainable productivity** enhanced by AI. Rather than chasing productivity hacks or rigid systems, these servers work with natural human patterns and proven methodologies to create lasting value.
+
+The servers are designed to prevent common pitfalls of AI-assisted work: superficial solutions, unsustainable intensity, and scattered effort. Instead, they promote depth, rhythm, and systematic progress.
+
+## Server Overview
+
+### 🌊 [Tides](./servers/tides/) - Rhythmic Workflow Management
+Brings natural rhythm and sustainability to productivity workflows, inspired by tidal patterns in nature.
+
+Tides helps create balanced work cycles that prevent burnout while maintaining consistent progress. [Learn more →](./servers/tides/)
+
+### 🧭 [Compass](./servers/compass/) - Systematic Project Methodology  
+Guides projects through a 4-phase methodology designed to prevent superficial work and ensure deep, meaningful outcomes.
+
+Compass enforces thorough exploration before execution, creating lasting value rather than quick wins. [Learn more →](./servers/compass/)
+
+### 🛠️ [Toolkit](./servers/toolkit/) - Essential Infrastructure Services
+Provides fundamental file operations and utilities needed by other MCP servers and workflows.
+
+Toolkit serves as shared infrastructure, handling common tasks so domain-specific servers can focus on their core functionality. [Learn more →](./servers/toolkit/)
+
+## Architecture
+
+### Why Monorepo
+MCP Fleet uses a monorepo architecture following proven patterns from enterprise implementations:
+
+1. **Shared Infrastructure**: Common MCP protocol handling and utilities
+2. **Coordinated Development**: Single repository for easier testing and CI/CD  
+3. **Independent Deployment**: Each server can be deployed and versioned separately
+4. **Workspace Benefits**: Unified dependency resolution across the ecosystem
+
+### Structure
 ```
-├── servers/                    # MCP servers
-│   ├── tides/                 # Rhythmic workflow management
-│   ├── compass/               # Systematic project methodology
-│   └── toolkit/               # Essential file operations and utilities
-├── packages/                  # Shared libraries
-│   ├── mcp_core/              # Core MCP functionality
-│   ├── claude_client/         # Anthropic API client
-│   └── common_tools/          # Shared MCP tools
-└── tests/                     # Comprehensive test suite
-```
-
-## Why Monorepo
-
-MCP Fleet uses a monorepo architecture following the same proven pattern as enterprise-grade implementations like Cloudflare's MCP servers:
-
-1. **Shared Infrastructure**: Common MCP protocol handling, utilities
-2. **Coordinated Development**: Single repo for easier testing and CI/CD  
-3. **Independent Deployment**: Each server can be deployed/versioned separately
-4. **Workspace Benefits**: Dependency resolution across the entire ecosystem
-
-## Quick Start
-
-### Development
-
-```bash
-# Install uv (if not already installed)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Sync dependencies
-uv sync
-
-# Run tests for all packages and servers
-uv run pytest
-
-# Run specific server tests
-uv run pytest tests/servers/tides/
-
-# Format code
-uv run black .
-
-# Lint code
-uv run ruff check .
-
-# Type check
-uv run mypy .
+├── servers/          # Individual MCP servers with focused responsibilities
+├── packages/         # Shared libraries (MCP core, AI client, common tools)
+├── docs/            # Architecture decisions, specs, and development logs
+└── tests/           # Comprehensive test suite covering all components
 ```
 
-### Docker Deployment
+## Getting Started
 
-```bash
-# Build all servers
-docker build --target tides -t mcp-fleet:tides .
-docker build --target compass -t mcp-fleet:compass .
-docker build --target toolkit -t mcp-fleet:toolkit .
+Each server is designed to work independently through Claude Desktop's MCP integration. The servers are available as pre-built Docker images and can be easily added to your Claude Desktop configuration.
 
-# Run individual server
-docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" mcp-fleet:tides
-```
+### Prerequisites
+- [Claude Desktop](https://claude.ai/download) (for MCP integration)
+- Docker (for containerized deployment)
+- `ANTHROPIC_API_KEY` environment variable (for AI features)
 
-## Servers
+### Installation
+Detailed installation and configuration instructions are available in each server's individual README:
+- [Tides Setup](./servers/tides/#getting-started)
+- [Compass Setup](./servers/compass/#getting-started)  
+- [Toolkit Setup](./servers/toolkit/#getting-started)
 
-### Tides
+## Use Cases
 
-Rhythmic workflow management based on natural tidal patterns for sustainable productivity cycles.
+### Knowledge Workers
+- **Researchers**: Use Compass for systematic literature reviews and research projects
+- **Consultants**: Apply Compass methodology for client engagements and deliverables
+- **Product Managers**: Balance feature development with Tides rhythms
 
-**Features:**
-- Create tidal workflows for different time scales
-- Flow session management with intensity control
-- Report generation (JSON, Markdown, CSV)
-- Persistent storage with Docker volume mounting
+### Software Developers  
+- **Project Planning**: Compass for requirement gathering and specification
+- **Work-Life Balance**: Tides for sustainable development cycles
+- **File Management**: Toolkit for build processes and project organization
 
-### Compass
+### Creative Professionals
+- **Writers**: Tides for managing creative energy across projects
+- **Designers**: Compass for client projects requiring systematic exploration
+- **Content Creators**: Balanced workflows using both servers together
 
-Systematic project methodology through exploration-to-execution phases. Enforces depth and prevents surface-level AI responses.
+## Documentation
 
-**Features:**
-- 4-phase methodology: Exploration → Specification → Execution → Feedback
-- Context preservation and conversation history
-- Pattern-based requirements generation
-- Task breakdown with priority management
+- **[Architecture Decisions](./docs/adr/)**: Key technical decisions and rationale
+- **[Technical Specifications](./docs/specs/)**: Detailed system documentation  
+- **[Development Log](./docs/devlog/)**: Progress notes and insights
 
-### Toolkit
+## Project Status
 
-Essential file operations and utility tools for MCP servers.
+MCP Fleet is actively developed with a focus on quality over quantity. Each server is thoroughly tested and designed for long-term reliability. The project follows a "showcase open source" model - sharing clean implementations and architectural patterns rather than seeking contributions.
 
-**Features:**
-- File I/O operations (read, write, create, delete)
-- Directory management and listing
-- Shared infrastructure for other servers
-
-## Packages
-
-### mcp_core
-
-Core MCP server functionality including:
-- MCP server creation factory
-- Transport utilities (stdio)
-- Type-safe tool definition helpers
-- Standardized error handling patterns
-
-### claude_client
-
-Enhanced Anthropic Claude API client with:
-- Retry logic and error recovery
-- Conversation management
-- Streaming response support
-- Rate limiting
-
-### common_tools
-
-Reusable MCP tools:
-- File operations (read, write, list directories)
-- Git operations and project discovery
-- Shared utilities used across servers
-
-## Testing
-
-```bash
-# Run all tests
-uv run pytest
-
-# Run package tests only
-uv run pytest tests/packages/
-
-# Run server tests only
-uv run pytest tests/servers/
-
-# Run specific tests with coverage
-uv run pytest tests/servers/tides/ --cov=servers/tides
-
-# Run integration tests
-uv run pytest tests/servers/tides/test_mcp_integration.py
-```
-
-## Environment Setup
-
-Requires `ANTHROPIC_API_KEY` environment variable for Claude API integration.
-
-### Claude Desktop Integration
-
-Add to your Claude Desktop configuration:
-
-```json
-{
-  "mcpServers": {
-    "tides": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "-i",
-        "--name", "tides-mcp-session",
-        "-e", "ANTHROPIC_API_KEY",
-        "-v", "/Users/your-username/Documents/TideReports:/app/reports",
-        "pazland/mcp-fleet-tides:main"
-      ]
-    }
-  }
-}
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Make changes following the existing patterns
-4. Ensure tests pass: `uv run pytest`
-5. Submit a pull request
+For questions or discussions, see the project's GitHub repository.
 
 ## License
 
