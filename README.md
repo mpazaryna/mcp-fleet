@@ -56,9 +56,9 @@ uv run mypy .
 
 ```bash
 # Build all servers
-docker build -f Dockerfile.all-python --target tides -t mcp-fleet:tides .
-docker build -f Dockerfile.all-python --target compass -t mcp-fleet:compass .
-docker build -f Dockerfile.all-python --target toolkit -t mcp-fleet:toolkit .
+docker build --target tides -t mcp-fleet:tides .
+docker build --target compass -t mcp-fleet:compass .
+docker build --target toolkit -t mcp-fleet:toolkit .
 
 # Run individual server
 docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" mcp-fleet:tides

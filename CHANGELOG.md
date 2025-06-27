@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - **BREAKING**: Folder structure reorganization affects local development setup
-- **Docker Configuration**: Updated Dockerfile.all-python with new folder paths
+- **Docker Configuration**: Updated Dockerfile with new folder paths
 - **Workspace Configuration**: Updated pyproject.toml workspace members
 - **Development Configs**: Updated claude-desktop-config-local.json paths
 - **Test Imports**: Updated all test files to use new folder structure
@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Simplified codebase to focus on stable servers (tides, compass, toolkit)
   - Removed 50+ template files and related Python cache artifacts
 - **Redundant Docker Files**: Cleaned up deployment infrastructure
-  - Removed docker-compose.yml (redundant with Dockerfile.all-python)
+  - Removed docker-compose.yml (redundant with Dockerfile)
   - Removed individual server Dockerfiles (consolidated to multi-stage build)
   - Removed deploy-tides-mcp.sh script (CI/CD handles publishing)
 

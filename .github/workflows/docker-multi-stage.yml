@@ -4,17 +4,17 @@ on:
   push:
     branches: [ python-migration, main ]
     paths:
-      - 'python-packages/**'
-      - 'python-servers/**'
-      - 'Dockerfile.all-python'
+      - 'packages/**'
+      - 'servers/**'
+      - 'Dockerfile'
       - 'pyproject.toml'
       - '.github/workflows/docker-multi-stage.yml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'python-packages/**'
-      - 'python-servers/**'
-      - 'Dockerfile.all-python'
+      - 'packages/**'
+      - 'servers/**'
+      - 'Dockerfile'
       - 'pyproject.toml'
   workflow_dispatch: # Allow manual triggering
 
@@ -60,7 +60,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile.all-python
+        file: ./Dockerfile
         target: python-base
         platforms: linux/amd64,linux/arm64
         push: true
@@ -83,7 +83,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile.all-python
+        file: ./Dockerfile
         target: tides
         platforms: linux/amd64,linux/arm64
         push: true
@@ -106,7 +106,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile.all-python
+        file: ./Dockerfile
         target: compass
         platforms: linux/amd64,linux/arm64
         push: true
@@ -129,7 +129,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile.all-python
+        file: ./Dockerfile
         target: toolkit
         platforms: linux/amd64,linux/arm64
         push: true
@@ -152,7 +152,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile.all-python
+        file: ./Dockerfile
         target: of
         platforms: linux/amd64,linux/arm64
         push: true
