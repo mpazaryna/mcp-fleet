@@ -37,6 +37,8 @@ async def main():
         
         # Convert dictionary tools to MCPTool objects
         all_tool_dicts = file_tools + draft_tools
+        logger.info(f"📊 Raw tool dicts: {len(all_tool_dicts)} tools")
+        
         all_tools = [
             MCPTool(
                 name=tool["name"],
@@ -46,7 +48,12 @@ async def main():
             )
             for tool in all_tool_dicts
         ]
+        logger.info(f"🔧 Converted to MCPTool objects: {len(all_tools)} tools")
+        for tool in all_tools:
+            logger.info(f"  - {tool.name}: {tool.description}")
+        
         all_handlers = {**file_handlers, **draft_handlers}
+        logger.info(f"🎯 Handlers registered: {list(all_handlers.keys())}")
         
         # Create server options
         server_options = MCPServerOptions(
