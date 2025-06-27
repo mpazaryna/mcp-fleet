@@ -8,7 +8,7 @@ import asyncio
 import logging
 import sys
 
-from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
+from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions, MCPTool
 from src.tools.file_tools import file_tools, file_handlers
 from src.tools.drafts_tools import draft_tools, draft_handlers
 
@@ -35,8 +35,17 @@ async def main():
             description="Essential file operations and utility tools for MCP servers, including Drafts app integration"
         )
         
-        # Combine all tools and handlers
-        all_tools = file_tools + draft_tools
+        # Convert dictionary tools to MCPTool objects
+        all_tool_dicts = file_tools + draft_tools
+        all_tools = [
+            MCPTool(
+                name=tool["name"],
+                description=tool["description"],
+                input_schema=tool["input_schema"],
+                output_schema=tool["output_schema"]
+            )
+            for tool in all_tool_dicts
+        ]
         all_handlers = {**file_handlers, **draft_handlers}
         
         # Create server options
