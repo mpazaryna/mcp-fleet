@@ -120,7 +120,7 @@ file_tools = [
 
 # MCP Tool handlers  
 file_handlers = {
-    "read_file": lambda **kwargs: read_file(kwargs["file_path"]),
-    "write_file": lambda **kwargs: write_file(kwargs["file_path"], kwargs["content"]),
-    "list_directory": lambda **kwargs: list_directory(kwargs["directory_path"])
+    "read_file": lambda args: read_file(args["file_path"]),
+    "write_file": lambda args: write_file(args["file_path"], args["content"]),
+    "list_directory": lambda args: list_directory(args["directory_path"])
 }
