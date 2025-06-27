@@ -18,14 +18,8 @@ COPY python-servers/ ./python-servers/
 # Install dependencies for the workspace
 RUN uv sync --frozen --no-dev
 
-# Create .pth file for workspace packages to be importable
-RUN python -c "import site; import os; \
-    pth_file = os.path.join(site.getsitepackages()[0], 'mcp-workspace.pth'); \
-    with open(pth_file, 'w') as f: \
-        f.write('/app/python-packages\\n')"
-
 # Set Python path for workspace packages
-ENV PYTHONPATH=/app/python-packages:/app
+ENV PYTHONPATH=/app/python-packages:/app/python-servers:/app
 
 # Base stage for MCP servers
 FROM python-base AS mcp-base

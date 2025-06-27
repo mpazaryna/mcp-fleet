@@ -16,7 +16,7 @@ COPY python-servers/ ./python-servers/
 RUN uv sync --frozen --no-dev
 
 # Set Python path for workspace packages
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/python-packages:/app/python-servers:/app
 
 # Default command (to be overridden by specific server Dockerfiles)
 CMD ["python", "-c", "print('MCP Fleet Python Base Image')"]
