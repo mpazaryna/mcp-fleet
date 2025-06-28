@@ -9,10 +9,6 @@ import asyncio
 import json
 import logging
 import sys
-from pathlib import Path
-
-# Add src to path for local imports
-sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 # Import MCP essentials
 from mcp.server import Server
@@ -20,7 +16,7 @@ from mcp.types import Tool, TextContent
 from mcp.server.stdio import stdio_server
 
 # Import our tools
-from tools.apple_notes_tools import notes_tools, notes_handlers
+from src.tools.apple_notes_tools import notes_tools, notes_handlers
 
 
 # Configure logging
@@ -43,7 +39,7 @@ async def main():
     
     # Register tool call handler
     @server.call_tool()
-    async def handle_tool_call(name: str, arguments: dict) -> list[TextContent]:
+    async def handle_tool_call(name: str, arguments: dict[str, object]) -> list[TextContent]:
         """Handle tool calls through MCP protocol"""
         logger.info(f"Tool call: {name} with args: {arguments}")
         
