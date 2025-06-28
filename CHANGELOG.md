@@ -178,7 +178,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 - **File Persistence**: Ensured all project files are saved to persistent mounted volumes
 - **Cross-Platform Compatibility**: Proper workspace detection for both native and Docker deployments
 
-## [0.3.0] - 2024-06-25
+## [0.3.0] - 2025-06-25
 
 ### Added
 - **Toolkit MCP Server**: Complete shared infrastructure server for file I/O operations
@@ -216,7 +216,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 - **Future Vision**: Pure microservices with toolkit handling all infrastructure concerns
 - **Migration Path**: Documented plan for removing file I/O from domain servers
 
-## [0.1.1] - 2024-12-25
+## [0.1.1] - 2025-06-25
 
 ### Added
 - Tide report file saving functionality with persistent storage
@@ -237,7 +237,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 - Fixed async/await patterns in report generation functions
 - Corrected import paths for Deno standard library
 
-## [0.1.0] - 2024-12-20
+## [0.1.0] - 2025-06-20
 
 ### Added
 - Docker containerization for MCP Fleet servers
@@ -253,7 +253,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 - Updated all configuration files for containerized deployment
 - Enhanced documentation for Docker-based workflows
 
-## [0.0.1] - 2024-12-20
+## [0.0.1] - 2025-06-20
 
 ### Added
 - Initial monorepo structure with orchestration-framework and tides servers
