@@ -15,12 +15,19 @@ Systematically analyzes and fixes GitHub issues following MCP Fleet's developmen
 
 **Process:**
 1. Fetches issue details using GitHub CLI
-2. Analyzes the problem and searches relevant code
-3. Implements necessary changes
-4. Writes and runs tests to verify the fix
-5. Ensures code passes linting and type checking
-6. Creates descriptive commit message
-7. Pushes changes and creates PR
+2. Creates new branch from main using issue number as branch name
+3. Analyzes the problem and searches relevant code
+4. Implements necessary changes
+5. Writes and runs tests to verify the fix
+6. Ensures code passes linting and type checking
+7. Creates descriptive commit messages with issue references
+8. Pushes branch and creates PR linking to the issue
+
+**Gitflow:**
+- Branch names match issue numbers (e.g., issue #42 → branch `42`)
+- No prefixes needed (no feature/, fix/, etc.)
+- Commits reference issues (e.g., `Fix: Description (#42)`)
+- PRs automatically close linked issues
 
 **Requirements:**
 - GitHub CLI (`gh`) installed and authenticated

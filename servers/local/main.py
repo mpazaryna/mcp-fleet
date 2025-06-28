@@ -6,10 +6,16 @@ Native macOS system integrations for Apple Notes, Reminders, Calendar, and file 
 Designed to run natively (not in Docker) for full system access via AppleScript.
 """
 import asyncio
+import json
 import logging
 import sys
 
-from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
+# Import MCP essentials
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+from mcp.server.stdio import stdio_server
+
+# Import our tools
 from src.tools.apple_notes_tools import notes_tools, notes_handlers
 
 
@@ -24,45 +30,59 @@ logger = logging.getLogger(__name__)
 
 
 async def main():
-    """Main server function"""
+    """Main server function using proper MCP protocol"""
     logger.info("🏠 Starting Local MCP Server...")
+    logger.info(f"   📝 Apple Notes tools: {len(notes_tools)} tools available")
     
-    try:
-        # Server configuration
-        server_config = MCPServerConfig(
-            name="local",
-            version="0.1.0",
-            description="Native macOS system integrations for Apple Notes, Reminders, Calendar, and file operations"
-        )
+    # Create the MCP server
+    server = Server("local")
+    
+    # Register tool call handler
+    @server.call_tool()
+    async def handle_tool_call(name: str, arguments: dict[str, object]) -> list[TextContent]:
+        """Handle tool calls through MCP protocol"""
+        logger.info(f"Tool call: {name} with args: {arguments}")
         
-        # Combine all tools and handlers (starting with Apple Notes)
-        all_tools = notes_tools
-        all_handlers = notes_handlers
+        if name not in notes_handlers:
+            raise ValueError(f"Unknown tool: {name}")
         
-        # Create server options
-        server_options = MCPServerOptions(
-            server_info=server_config,
-            tools=all_tools,
-            handlers=all_handlers
-        )
-        
-        # Create the MCP server
-        server = create_mcp_server(server_options)
-        
-        # Connect to stdio transport
-        transport = StdioTransport()
-        await transport.connect(server)
-        
-        logger.info("🏠 Local MCP Server connected and ready")
-        logger.info(f"   📝 Apple Notes tools: {len(notes_tools)} tools available")
-        
-        # Keep the process running
-        while True:
-            await asyncio.sleep(1)
+        try:
+            handler = notes_handlers[name]
+            result = await handler(arguments)
             
-    except Exception as error:
-        logger.error(f"❌ Failed to start Local MCP Server: {error}")
-        sys.exit(1)
+            # Return result as TextContent
+            return [TextContent(
+                type="text",
+                text=json.dumps(result, indent=2)
+            )]
+            
+        except Exception as e:
+            logger.error(f"Error in tool {name}: {e}")
+            raise
+    
+    # Register tools list handler
+    @server.list_tools()
+    async def list_tools() -> list[Tool]:
+        """List available tools"""
+        logger.info("Listing available tools")
+        return [
+            Tool(
+                name=tool["name"],
+                description=tool["description"],
+                inputSchema=tool["input_schema"]
+            )
+            for tool in notes_tools
+        ]
+    
+    logger.info("🏠 Local MCP Server ready")
+    
+    # Run the server with stdio transport
+    async with stdio_server() as (read_stream, write_stream):
+        await server.run(
+            read_stream,
+            write_stream,
+            server.create_initialization_options()
+        )
 
 
 if __name__ == "__main__":
