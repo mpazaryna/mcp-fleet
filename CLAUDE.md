@@ -244,9 +244,11 @@ uv run pytest servers/local/tests/test_apple_notes_tools.py -m e2e -s
 
 Custom commands are available in `.claude/commands/` to streamline development:
 
+- `/project:write-github-issue <planning_notes>` - Create well-structured GitHub issues from planning sessions
 - `/project:fix-github-issue <issue_number>` - Systematically analyze and fix GitHub issues following TDD methodology
 - Use GitHub CLI (`gh`) for all GitHub-related operations
 - Follow established patterns for testing, linting, and commit messages
+- Maintain consistent issue structure with clear requirements and acceptance criteria
 
 ## Development Notes
 

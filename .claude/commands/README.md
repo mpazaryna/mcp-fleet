@@ -26,6 +26,36 @@ Systematically analyzes and fixes GitHub issues following MCP Fleet's developmen
 - GitHub CLI (`gh`) installed and authenticated
 - Proper repository permissions for branches and PRs
 
+### `/project:write-github-issue <planning_notes>`
+
+Creates well-structured GitHub issues from planning sessions or requirements discussions.
+
+**Usage:**
+```
+/project:write-github-issue "Add Apple Calendar integration to local server similar to Notes"
+```
+
+**Process:**
+1. Analyzes planning session notes or requirements
+2. Structures information using standardized template
+3. Creates comprehensive issue with:
+   - Clear issue description
+   - Detailed requirements
+   - Current state documentation
+   - Testable acceptance criteria
+   - Source references
+   - Priority assessment
+4. Applies appropriate labels
+5. Creates issue using GitHub CLI
+
+**Template Sections:**
+- **Issue Description** - Clear problem statement and purpose
+- **Requirements** - Numbered list of specific needs
+- **Current State** - What exists now and gaps
+- **Acceptance Criteria** - Checklist of measurable outcomes
+- **Source** - Reference to planning materials
+- **Priority** - High/Medium/Low with justification
+
 ## Adding Your Own Commands
 
 You can add additional `.md` files to this directory to create custom commands for your workflow. Each command file should:
