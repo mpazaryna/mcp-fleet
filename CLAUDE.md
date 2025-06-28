@@ -242,13 +242,20 @@ uv run pytest servers/local/tests/test_apple_notes_tools.py -m e2e -s
 
 ## Claude Code Commands
 
-Custom commands are available in `.claude/commands/` to streamline development:
+Custom commands are available in `.claude/commands/` to streamline development workflow:
 
+### GitHub Issue Management
 - `/project:write-github-issue <planning_notes>` - Create well-structured GitHub issues from planning sessions
 - `/project:fix-github-issue <issue_number>` - Systematically analyze and fix GitHub issues following TDD methodology
-- Use GitHub CLI (`gh`) for all GitHub-related operations
-- Follow established patterns for testing, linting, and commit messages
-- Maintain consistent issue structure with clear requirements and acceptance criteria
+
+### Development Workflow
+All development work should follow this systematic approach:
+1. **Planning**: Use `/project:write-github-issue` to create issues for new features or fixes
+2. **Implementation**: Use `/project:fix-github-issue <number>` to systematically address issues
+3. **Quality**: Commands automatically include proper gitflow, testing, and code review integration
+4. **Cleanup**: Branch cleanup is handled automatically after merge
+
+This ensures consistent, trackable development with proper issue management and git hygiene.
 
 ## Development Notes
 
