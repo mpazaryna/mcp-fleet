@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [2.2.0] - 2025-06-27
 
 ### Added
-- Local MCP Server**: Native macOS system integrations that bypass Docker limitations
+- Local MCP Server: Native macOS system integrations that bypass Docker limitations
   - **Apple Notes Integration**: Complete AppleScript-based note management
     - `create_note` - Create notes with title and content in Apple Notes
     - `list_notes` - List all notes or notes from specific folders
