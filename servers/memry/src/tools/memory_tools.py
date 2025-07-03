@@ -106,26 +106,26 @@ class EmptyInputSchema(BaseModel):
 
 
 # Tool handlers
-async def create_memory_handler(
-    input_data: CreateMemoryInputSchema,
-) -> CreateMemoryOutputSchema:
+async def create_memory_handler(input_data: dict) -> dict:
     """Create a new memory"""
     try:
-        logger.info(f"💾 Creating memory: {input_data.title}")
+        # Parse input data into schema
+        parsed_input = CreateMemoryInputSchema(**input_data)
+        logger.info(f"💾 Creating memory: {parsed_input.title}")
 
         # Create memory input
         memory_input = CreateMemoryInput(
-            title=input_data.title,
-            content=input_data.content,
-            source=input_data.source,
-            tags=input_data.tags,
-            topic_slug=input_data.topic_slug,
+            title=parsed_input.title,
+            content=parsed_input.content,
+            source=parsed_input.source,
+            tags=parsed_input.tags,
+            topic_slug=parsed_input.topic_slug,
         )
 
         # Create memory
         memory = memory_storage.create_memory(memory_input)
 
-        return CreateMemoryOutputSchema(
+        result = CreateMemoryOutputSchema(
             success=True,
             filename=memory.filename,
             file_path=memory.file_path,
@@ -133,27 +133,29 @@ async def create_memory_handler(
             date=memory.metadata.date,
             tags=memory.metadata.tags,
         )
+        return result.model_dump()
 
     except Exception as e:
         logger.error(f"Error creating memory: {e}")
-        return CreateMemoryOutputSchema(
+        result = CreateMemoryOutputSchema(
             success=False, filename="", file_path="", title="", date="", tags=[]
         )
+        return result.model_dump()
 
 
-async def search_memories_handler(
-    input_data: SearchMemoriesInputSchema,
-) -> SearchMemoriesOutputSchema:
+async def search_memories_handler(input_data: dict) -> dict:
     """Search memories based on criteria"""
     try:
-        logger.info(f"🔍 Searching memories with criteria: {input_data}")
+        # Parse input data into schema
+        parsed_input = SearchMemoriesInputSchema(**input_data)
+        logger.info(f"🔍 Searching memories with criteria: {parsed_input}")
 
         # Create search filter
         search_filter = SearchFilter(
-            date_from=input_data.date_from,
-            date_to=input_data.date_to,
-            tags=input_data.tags,
-            content_search=input_data.content_search,
+            date_from=parsed_input.date_from,
+            date_to=parsed_input.date_to,
+            tags=parsed_input.tags,
+            content_search=parsed_input.content_search,
         )
 
         # Search memories
@@ -178,16 +180,18 @@ async def search_memories_handler(
                 )
             )
 
-        return SearchMemoriesOutputSchema(
+        result = SearchMemoriesOutputSchema(
             success=True, total_found=len(memories), memories=memory_summaries
         )
+        return result.model_dump()
 
     except Exception as e:
         logger.error(f"Error searching memories: {e}")
-        return SearchMemoriesOutputSchema(success=False, total_found=0, memories=[])
+        result = SearchMemoriesOutputSchema(success=False, total_found=0, memories=[])
+        return result.model_dump()
 
 
-async def list_all_memories_handler() -> SearchMemoriesOutputSchema:
+async def list_all_memories_handler() -> dict:
     """List all memories"""
     try:
         logger.info("📋 Listing all memories")
@@ -213,23 +217,25 @@ async def list_all_memories_handler() -> SearchMemoriesOutputSchema:
                 )
             )
 
-        return SearchMemoriesOutputSchema(
+        result = SearchMemoriesOutputSchema(
             success=True, total_found=len(memories), memories=memory_summaries
         )
+        return result.model_dump()
 
     except Exception as e:
         logger.error(f"Error listing memories: {e}")
-        return SearchMemoriesOutputSchema(success=False, total_found=0, memories=[])
+        result = SearchMemoriesOutputSchema(success=False, total_found=0, memories=[])
+        return result.model_dump()
 
 
-async def get_memory_stats_handler() -> StatsOutputSchema:
+async def get_memory_stats_handler() -> dict:
     """Get memory statistics"""
     try:
         logger.info("📊 Getting memory statistics")
 
         stats = memory_storage.get_memory_stats()
 
-        return StatsOutputSchema(
+        result = StatsOutputSchema(
             success=True,
             total_memories=stats["total_memories"],
             sources=stats["sources"],
@@ -237,10 +243,11 @@ async def get_memory_stats_handler() -> StatsOutputSchema:
             dates=stats["dates"],
             storage_path=stats["storage_path"],
         )
+        return result.model_dump()
 
     except Exception as e:
         logger.error(f"Error getting memory stats: {e}")
-        return StatsOutputSchema(
+        result = StatsOutputSchema(
             success=False,
             total_memories=0,
             sources={},
@@ -248,6 +255,7 @@ async def get_memory_stats_handler() -> StatsOutputSchema:
             dates={},
             storage_path="",
         )
+        return result.model_dump()
 
 
 # Tool definitions
