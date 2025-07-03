@@ -6,7 +6,8 @@ members = [
     "servers/tides",
     "servers/compass", 
     "servers/toolkit",
-    "servers/local"
+    "servers/local",
+    "servers/memry"
 ]
 
 [tool.uv]
