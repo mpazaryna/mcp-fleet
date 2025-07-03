@@ -1,6 +1,6 @@
 [project]
 name = "claude-client"
-version = "0.1.0"
+version = "3.0.0"
 description = "Enhanced Anthropic Claude API client with retry logic and conversation management"
 requires-python = ">=3.11"
 dependencies = [

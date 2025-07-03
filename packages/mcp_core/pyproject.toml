@@ -1,6 +1,6 @@
 [project]
 name = "mcp-core"
-version = "0.1.0"
+version = "3.0.0"
 description = "Core MCP server functionality for building Model Context Protocol servers"
 requires-python = ">=3.11"
 dependencies = [
