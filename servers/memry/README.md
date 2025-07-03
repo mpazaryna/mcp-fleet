@@ -1,15 +1,16 @@
 # MCP-Memry Server
 
-A Python-based memory storage system designed to store and retrieve information from Claude interactions using markdown files with YAML frontmatter.
+A Python-based memory storage system designed to store and retrieve information from Claude interactions using JSON files with the mcp-storage library.
 
 ## Overview
 
-MCP-Memry provides a simple file-based approach to storing memories with the following features:
+MCP-Memry provides a robust file-based approach to storing memories with the following features:
 
-- **File Storage**: Filesystem-based storage using markdown files
-- **YAML Frontmatter**: Structured metadata with title, date, source, and tags
-- **Simple Search**: Find memories by date range, tags, or content
-- **Automatic Naming**: Files follow the pattern `YYYY-MM-DD-topic-slug.md`
+- **JSON Storage**: Structured storage using JSON files via mcp-storage library
+- **Type-Safe Schema**: Pydantic models ensure data integrity and validation
+- **Entity-Based Storage**: Each memory is stored as a separate JSON file with unique ID
+- **Simple Search**: Find memories by date range, tags, source, or content
+- **Automatic ID Generation**: Files are named by UUID for guaranteed uniqueness
 
 ## Storage Structure
 
@@ -19,34 +20,45 @@ MCP-Memry provides a simple file-based approach to storing memories with the fol
 ```
 
 ### File Naming Convention
-Files follow the pattern: `YYYY-MM-DD-topic-slug.md`
+Files are named by UUID with `.json` extension:
+- `550e8400-e29b-41d4-a716-446655440000.json`
+- `6ba7b810-9dad-11d1-80b4-00c04fd430c8.json`
 
-Examples:
-- `2025-07-01-llm-names-it.md`
-- `2025-07-03-context-protocol-design.md`
+### Memory Schema
+Each JSON file contains structured memory data:
 
-### Metadata Schema
-Each markdown file contains YAML frontmatter:
-
-```yaml
----
-title: "Descriptive Title of Memory"
-date: YYYY-MM-DD
-source: "claude-desktop|claude-code|etc"
-tags: ["tag1", "tag2", "tag3"]
----
-
-Memory content goes here in markdown format.
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Descriptive Title of Memory",
+  "content": "Memory content goes here",
+  "source": "claude-desktop",
+  "tags": ["tag1", "tag2", "tag3"],
+  "date_slug": "2025-07-03",
+  "topic_slug": "context-protocol-design",
+  "filename": "2025-07-03-context-protocol-design"
+}
 ```
+
+### Benefits of JSON Storage
+
+The switch from markdown to JSON provides several advantages:
+
+1. **Structured Data**: JSON enforces a consistent schema across all memories
+2. **Type Safety**: Pydantic models validate data before storage
+3. **Better Querying**: Structured fields enable efficient filtering and searching
+4. **Integration Ready**: JSON format is easily consumed by other tools and APIs
+5. **Metadata Integrity**: All metadata is stored in a standardized format
+6. **Future Extensibility**: Easy to add new fields without breaking existing data
 
 ## Available Tools
 
 ### create_memory
-Create a new memory file with markdown content and YAML frontmatter.
+Create a new memory as a JSON file with structured data.
 
 **Parameters:**
 - `title`: Title of the memory
-- `content`: Content of the memory in markdown
+- `content`: Content of the memory (plain text or markdown formatting)
 - `source`: Source of the memory (defaults to "claude-code")
 - `tags`: List of tags for categorizing (optional)
 - `topic_slug`: Optional topic slug for filename (auto-generated if not provided)
@@ -136,6 +148,8 @@ uv run python servers/memry/main.py
 ## Technical Details
 
 - **Python Version**: 3.11+
-- **Dependencies**: mcp-core, pydantic, pyyaml, aiofiles
-- **Storage**: Local filesystem with markdown files
+- **Dependencies**: mcp-core, mcp-storage, pydantic, pyyaml, aiofiles
+- **Storage**: Local filesystem with JSON files via mcp-storage library
 - **Protocol**: Model Context Protocol (MCP) for Claude integration
+- **Data Integrity**: Type-safe Pydantic models with validation
+- **Scalability**: Entity-based storage supports efficient querying and filtering
