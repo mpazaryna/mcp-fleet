@@ -4,7 +4,49 @@ All notable changes to MCP Fleet will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [2.2.0] - 2025-06-27
+## [3.0.0] - 2025-07-03
+
+### Added
+- **Memry Server**: New MCP server for memory storage and retrieval
+  - File-based storage using markdown with YAML frontmatter
+  - `store_memory` - Store new memories with content and metadata
+  - `search_memories` - Full-text search across stored memories
+  - `get_memory` - Retrieve specific memory by ID
+  - `list_memories` - List all stored memories with filtering
+  - `delete_memory` - Remove specific memories
+  - Docker Hub CI/CD integration for automated builds
+- **mcp-storage Package**: Shared storage library for MCP servers
+  - JSON file backend implementation
+  - Entity and configuration management
+  - Type-safe Pydantic models for data validation
+- **Enhanced Testing Infrastructure**
+  - New E2E test framework for Docker-based MCP servers
+  - UAT (User Acceptance Testing) for real-world scenarios
+  - Comprehensive test coverage for memry server and storage package
+- **GitHub Workflow Commands**: New Claude Code commands for systematic development
+  - `/project:write-github-issue` - Create well-structured GitHub issues
+  - `/project:fix-github-issue` - Systematically analyze and fix issues with TDD
+
+### Changed
+- **MCP Protocol Compliance**: Major fixes for proper MCP specification adherence
+  - Fixed missing input parameters in handlers without input
+  - Updated all MCP tool handlers for proper protocol compatibility
+  - Standardized tool schemas across all servers
+- **Documentation Updates**
+  - Updated CLAUDE.md with new development workflow commands
+  - Added comprehensive testing strategy documentation
+  - Enhanced server architecture descriptions
+
+### Breaking Changes
+- **MCP Protocol Updates**: All MCP tool handlers now strictly follow the protocol specification. Existing integrations may need updates to handle the corrected input/output schemas.
+- **Storage Format**: New mcp-storage package introduces a standardized storage format that may not be compatible with custom storage implementations.
+
+### Fixed
+- MCP tool handlers now properly handle cases with no input parameters
+- Protocol compatibility issues that could cause client connection failures
+- Standardized error handling across all MCP servers
+
+## [2.2.0] - 2025-06-27 (Unreleased)
 
 ### Added
 - Local MCP Server: Native macOS system integrations that bypass Docker limitations

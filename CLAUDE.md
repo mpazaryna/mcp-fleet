@@ -212,10 +212,13 @@ Docker deployment is available but has limitations:
 
 ## Testing Strategy
 
-Comprehensive three-tier testing approach:
-- **Unit tests** - Individual component behavior with mocking
-- **Integration tests** - Cross-component workflows and API testing
-- **E2E tests** - Full MCP protocol testing with real system integration
+Comprehensive four-tier testing approach following TDD methodology:
+
+### Testing Hierarchy
+1. **Unit Tests** - Individual component behavior with mocking
+2. **Integration Tests** - Cross-component workflows and API testing  
+3. **E2E Tests** - Full MCP protocol testing with Docker containers
+4. **UAT Tests** - Real-world user scenarios with actual file creation
 
 ### Running Tests
 ```bash
@@ -229,7 +232,23 @@ uv run pytest servers/local/tests/ -v   # Specific server tests
 
 # Apple Notes E2E testing (creates real notes)
 uv run pytest servers/local/tests/test_apple_notes_tools.py -m e2e -s
+
+# UAT - Final acceptance testing
+python tests/uat/test_memry_docker_uat.py    # User acceptance test for memry
 ```
+
+### Test Development Process
+Follow strict TDD methodology:
+1. **Red**: Write failing test that captures the requirement
+2. **Green**: Write minimal code to make the test pass  
+3. **Refactor**: Improve code while keeping tests passing
+4. **Repeat**: Continue until feature is complete
+
+### E2E Testing Framework
+- **MCPDockerClient**: Simulates Claude Desktop interaction with Docker containers
+- **Protocol Validation**: Tests complete MCP JSON-RPC communication flow
+- **Real Storage**: Validates actual file creation and persistence
+- **Timeout Handling**: Proper interactive communication prevents hangs
 
 ## Key Conventions
 
