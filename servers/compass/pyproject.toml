@@ -1,6 +1,6 @@
 [project]
 name = "compass"
-version = "0.1.0"
+version = "3.0.0"
 description = "Systematic project methodology through exploration-to-execution phases"
 requires-python = ">=3.11"
 dependencies = [

@@ -1,6 +1,6 @@
 [project]
 name = "local"
-version = "0.1.0"
+version = "3.0.0"
 description = "Local system integration MCP server for Apple Notes, Reminders, Calendar, and file operations"
 requires-python = ">=3.11"
 dependencies = [
