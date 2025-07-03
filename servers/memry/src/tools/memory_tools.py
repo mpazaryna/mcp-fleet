@@ -191,7 +191,7 @@ async def search_memories_handler(input_data: dict) -> dict:
         return result.model_dump()
 
 
-async def list_all_memories_handler() -> dict:
+async def list_all_memories_handler(input_data: dict = None) -> dict:
     """List all memories"""
     try:
         logger.info("📋 Listing all memories")
@@ -228,7 +228,7 @@ async def list_all_memories_handler() -> dict:
         return result.model_dump()
 
 
-async def get_memory_stats_handler() -> dict:
+async def get_memory_stats_handler(input_data: dict = None) -> dict:
     """Get memory statistics"""
     try:
         logger.info("📊 Getting memory statistics")
