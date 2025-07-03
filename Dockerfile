@@ -65,3 +65,18 @@ LABEL org.opencontainers.image.version="2.0.0"
 LABEL mcp.server.name="toolkit"
 LABEL mcp.server.tools="file_operations,utility_tools,common_tools"
 
+# Memry MCP Server
+FROM mcp-base AS memry
+WORKDIR /app/servers/memry
+ENV MEMRY_STORAGE_PATH=/app/memories
+RUN mkdir -p /app/memories && chown -R root:root /app/memories
+VOLUME ["/app/memories"]
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["uv", "run", "python", "main.py"]
+LABEL org.opencontainers.image.title="Memry MCP Server"
+LABEL org.opencontainers.image.description="Memory storage system for Claude interactions using markdown files"
+LABEL org.opencontainers.image.vendor="MCP Fleet"
+LABEL org.opencontainers.image.version="2.0.0"
+LABEL mcp.server.name="memry"
+LABEL mcp.server.tools="memory_storage,search,create_memory,list_memories,memory_stats"
+
