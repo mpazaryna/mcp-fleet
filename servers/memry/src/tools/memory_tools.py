@@ -100,6 +100,11 @@ class StatsOutputSchema(BaseModel):
     storage_path: str
 
 
+class EmptyInputSchema(BaseModel):
+    """Empty schema for tools that don't require input"""
+    pass
+
+
 # Tool handlers
 async def create_memory_handler(
     input_data: CreateMemoryInputSchema,
@@ -250,26 +255,26 @@ memory_tools: list[MCPTool] = [
     MCPTool(
         name="create_memory",
         description="Create memory file with markdown content and YAML frontmatter",
-        input_schema=CreateMemoryInputSchema,
-        output_schema=CreateMemoryOutputSchema,
+        input_schema=CreateMemoryInputSchema.model_json_schema(),
+        output_schema=CreateMemoryOutputSchema.model_json_schema(),
     ),
     MCPTool(
         name="search_memories",
         description="Search memories by date range, tags, or content",
-        input_schema=SearchMemoriesInputSchema,
-        output_schema=SearchMemoriesOutputSchema,
+        input_schema=SearchMemoriesInputSchema.model_json_schema(),
+        output_schema=SearchMemoriesOutputSchema.model_json_schema(),
     ),
     MCPTool(
         name="list_all_memories",
         description="List all stored memories",
-        input_schema=None,
-        output_schema=SearchMemoriesOutputSchema,
+        input_schema=EmptyInputSchema.model_json_schema(),
+        output_schema=SearchMemoriesOutputSchema.model_json_schema(),
     ),
     MCPTool(
         name="get_memory_stats",
         description="Get statistics about stored memories",
-        input_schema=None,
-        output_schema=StatsOutputSchema,
+        input_schema=EmptyInputSchema.model_json_schema(),
+        output_schema=StatsOutputSchema.model_json_schema(),
     ),
 ]
 

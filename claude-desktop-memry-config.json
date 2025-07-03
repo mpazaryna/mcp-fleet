@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "memry": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/mpaz/workspace/mcp-fleet",
+        "run",
+        "python",
+        "servers/memry/main.py"
+      ],
+      "env": {
+        "MEMRY_STORAGE_PATH": "/Users/mpaz/Documents/memry"
+      }
+    }
+  }
+}
