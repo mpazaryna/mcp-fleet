@@ -48,12 +48,14 @@ Follow this standardized format to ensure high-quality issue creation:
 1. Analyze the planning session or requirements provided
 2. Structure the information according to the template
 3. Ensure each section is complete and specific
-4. Add appropriate labels based on issue type:
+4. Add appropriate labels based on issue type (use only standard repository labels):
    - `enhancement` for new features
-   - `bug` for fixes
+   - `bug` for fixes  
    - `documentation` for docs
    - `refactor` for code improvements
    - `question` for clarifications needed
+   - `good first issue` for newcomer-friendly tasks
+   - `help wanted` for community contributions
 5. Use `gh issue create` with the formatted content
 6. Assign to appropriate team members if specified
 7. Link to related issues or PRs if applicable
@@ -87,6 +89,17 @@ The final command will be:
 gh issue create \
   --title "[Concise title from description]" \
   --body "[Full formatted content]" \
-  --label "[appropriate labels]" \
-  --project "[if applicable]"
+  --label "[standard repository labels only]"
 ```
+
+## Available Repository Labels
+
+Only use these standard labels that exist in the repository:
+- `bug` - Something isn't working
+- `documentation` - Improvements or additions to documentation  
+- `enhancement` - New feature or request
+- `good first issue` - Good for newcomers
+- `help wanted` - Extra attention is needed
+- `question` - Further information is requested
+- `refactor` - Improvement without changing observable behavior
+- `duplicate`, `invalid`, `wontfix` - Administrative labels
