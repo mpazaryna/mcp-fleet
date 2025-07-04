@@ -34,6 +34,7 @@ Example:
    - Determines next version based on type
    - Creates annotated tag with release message
    - Updates pyproject.toml files with new version
+   - Updates CHANGELOG.md with release notes and date
 
 4. **Pushes Everything**
    - Pushes main branch
@@ -50,6 +51,7 @@ Example:
 - ✅ Feature branch successfully merged to main
 - ✅ Semantic version tag created and pushed
 - ✅ pyproject.toml files updated with new version
+- ✅ CHANGELOG.md updated with release notes
 - ✅ All changes pushed to GitHub
 - ✅ Feature branch cleaned up
 - ✅ Clear release notes provided
@@ -152,6 +154,44 @@ fi
 echo "📋 Generating release notes..."
 RELEASE_NOTES=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s" --no-merges)
 
+# Update CHANGELOG.md
+echo "📝 Updating CHANGELOG.md..."
+CURRENT_DATE=$(date "+%Y-%m-%d")
+CHANGELOG_ENTRY="## [$VERSION_ONLY] - $CURRENT_DATE
+
+### Changes
+$RELEASE_NOTES
+
+"
+
+# Create new CHANGELOG content by inserting the new entry after the header
+if [ -f "CHANGELOG.md" ]; then
+    # Find the first occurrence of "## [" (first version entry)
+    FIRST_VERSION_LINE=$(grep -n "^## \[" CHANGELOG.md | head -1 | cut -d: -f1)
+    if [ -n "$FIRST_VERSION_LINE" ]; then
+        # Insert new entry before the first version entry
+        INSERT_LINE=$((FIRST_VERSION_LINE - 1))
+        
+        # Create temporary file with new content
+        head -n $INSERT_LINE CHANGELOG.md > CHANGELOG.tmp
+        echo "$CHANGELOG_ENTRY" >> CHANGELOG.tmp
+        tail -n +$((INSERT_LINE + 1)) CHANGELOG.md >> CHANGELOG.tmp
+        
+        # Replace original file
+        mv CHANGELOG.tmp CHANGELOG.md
+        
+        # Stage the changelog
+        git add CHANGELOG.md
+        git commit -m "docs: Update CHANGELOG.md for $NEW_VERSION"
+        
+        echo "  ✅ CHANGELOG.md updated with release $NEW_VERSION"
+    else
+        echo "  ⚠️  Could not find version entries in CHANGELOG.md, skipping update"
+    fi
+else
+    echo "  ⚠️  CHANGELOG.md not found, skipping update"
+fi
+
 # Create annotated tag
 echo "🏷️  Creating version tag..."
 git tag -a "$NEW_VERSION" -m "Release $NEW_VERSION
@@ -210,3 +250,4 @@ The command will fail gracefully if:
 - Must have push permissions to main branch
 - Must be on a feature branch (not main)
 - pyproject.toml files must exist for version updates
+- CHANGELOG.md should exist following Keep a Changelog format
