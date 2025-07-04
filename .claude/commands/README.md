@@ -4,13 +4,13 @@ This directory contains custom commands for Claude Code to streamline MCP Fleet 
 
 ## Available Commands
 
-### `/project:fix-github-issue <issue_number>`
+### `/project:issue-fix <issue_number>`
 
 Systematically analyzes and fixes GitHub issues following MCP Fleet's development best practices.
 
 **Usage:**
 ```
-/project:fix-github-issue 1234
+/project:issue-fix 1234
 ```
 
 **Process:**
@@ -33,13 +33,13 @@ Systematically analyzes and fixes GitHub issues following MCP Fleet's developmen
 - GitHub CLI (`gh`) installed and authenticated
 - Proper repository permissions for branches and PRs
 
-### `/project:write-github-issue <planning_notes>`
+### `/project:issue write <planning_notes>`
 
 Creates well-structured GitHub issues from planning sessions or requirements discussions.
 
 **Usage:**
 ```
-/project:write-github-issue "Add new workflow management features to tides server"
+/project:issue-write "Add new workflow management features to tides server"
 ```
 
 **Process:**

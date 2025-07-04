@@ -1,31 +1,32 @@
 """
 MCP server creation and factory functionality
 """
+
 import logging
-from typing import Any, Dict, Optional
+from typing import Any
+
 from mcp.server import Server
 from mcp.types import Tool
 
-from .types import MCPServerOptions, MCPLogger
-
+from .types import MCPLogger, MCPServerOptions
 
 logger = logging.getLogger(__name__)
 
 
-def create_mcp_server(options: MCPServerOptions) -> Server:
+def create_mcp_server(options: MCPServerOptions) -> Server[Any]:
     """
     Creates a standardized MCP server with error handling and logging
     """
     server_info = options.server_info
     tools = options.tools
     handlers = options.handlers
-    
+
     # Create the MCP server
-    server = Server(server_info.name)
-    
+    server: Server[Any] = Server(server_info.name)
+
     # Register the tool call handler
-    @server.call_tool()
-    async def handle_tool_call(name: str, arguments: Dict[str, Any]) -> Any:
+    @server.call_tool()  # type: ignore
+    async def handle_tool_call(name: str, arguments: dict[str, Any]) -> Any:
         if name in handlers:
             handler = handlers[name]
             try:
@@ -37,19 +38,19 @@ def create_mcp_server(options: MCPServerOptions) -> Server:
                 raise error
         else:
             raise ValueError(f"Unknown tool: {name}")
-    
+
     # Register all tools
-    @server.list_tools()
+    @server.list_tools()  # type: ignore
     async def list_tools() -> list[Tool]:
         return [
             Tool(
                 name=tool.name,
                 description=tool.description,
-                inputSchema=tool.input_schema
+                inputSchema=tool.input_schema,
             )
             for tool in tools
         ]
-    
+
     return server
 
 
@@ -57,16 +58,16 @@ class MCPServerFactory:
     """
     Standard MCP server factory with common setup
     """
-    
-    def __init__(self, logger: Optional[MCPLogger] = None):
+
+    def __init__(self, logger: MCPLogger | None = None):
         self.logger = logger
-    
-    def create(self, options: MCPServerOptions) -> Server:
+
+    def create(self, options: MCPServerOptions) -> Server[Any]:
         """Create an MCP server with the given options"""
         if self.logger:
             server_info = options.server_info
             self.logger.info(
                 f"Creating MCP server: {server_info.name} v{server_info.version}"
             )
-        
+
         return create_mcp_server(options)

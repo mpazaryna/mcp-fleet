@@ -5,6 +5,7 @@ Memory management tools for MCP-Memry
 import logging
 import os
 from pathlib import Path
+from typing import Any
 
 from core.types import MCPTool
 from pydantic import BaseModel, Field
@@ -16,7 +17,6 @@ from .memory_models import (
     CreateMemoryInput,
     MemoryData,
     MemoryFilter,
-    MemorySummary,
 )
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ memory_storage = create_entity_storage(
     entity_type=MemoryData,
     backend=backend,
     id_generator=default_id_generator,
-    id_field="id"
+    id_field="id",
 )
 
 
@@ -84,12 +84,8 @@ class SearchMemoriesInputSchema(BaseModel):
     source: str | None = Field(
         default=None, description="Filter by source of the memory"
     )
-    limit: int | None = Field(
-        default=None, description="Limit number of results"
-    )
-    offset: int | None = Field(
-        default=None, description="Offset for pagination"
-    )
+    limit: int | None = Field(default=None, description="Limit number of results")
+    offset: int | None = Field(default=None, description="Offset for pagination")
 
 
 class MemorySummarySchema(BaseModel):
@@ -125,11 +121,12 @@ class StatsOutputSchema(BaseModel):
 
 class EmptyInputSchema(BaseModel):
     """Empty schema for tools that don't require input"""
+
     pass
 
 
 # Tool handlers
-async def create_memory_handler(input_data: dict) -> dict:
+async def create_memory_handler(input_data: dict[str, Any]) -> dict[str, Any]:
     """Create a new memory"""
     try:
         # Parse input data into schema
@@ -166,7 +163,7 @@ async def create_memory_handler(input_data: dict) -> dict:
         return result.model_dump()
 
 
-async def search_memories_handler(input_data: dict) -> dict:
+async def search_memories_handler(input_data: dict[str, Any]) -> dict[str, Any]:
     """Search memories based on criteria"""
     try:
         # Parse input data into schema
@@ -218,7 +215,7 @@ async def search_memories_handler(input_data: dict) -> dict:
         return result.model_dump()
 
 
-async def list_all_memories_handler(input_data: dict = None) -> dict:
+async def list_all_memories_handler(input_data: dict[str, Any] | None = None) -> dict[str, Any]:
     """List all memories"""
     try:
         logger.info("📋 Listing all memories")
@@ -256,28 +253,28 @@ async def list_all_memories_handler(input_data: dict = None) -> dict:
         return result.model_dump()
 
 
-async def get_memory_stats_handler(input_data: dict = None) -> dict:
+async def get_memory_stats_handler(input_data: dict[str, Any] | None = None) -> dict[str, Any]:
     """Get memory statistics"""
     try:
         logger.info("📊 Getting memory statistics")
 
         # Get all memories
         memories = await memory_storage.list()
-        
+
         # Calculate statistics
         total_memories = len(memories)
-        sources = {}
-        tags = {}
-        dates = {}
-        
+        sources: dict[str, int] = {}
+        tags: dict[str, int] = {}
+        dates: dict[str, int] = {}
+
         for memory in memories:
             # Count sources
             sources[memory.source] = sources.get(memory.source, 0) + 1
-            
+
             # Count tags
             for tag in memory.tags:
                 tags[tag] = tags.get(tag, 0) + 1
-            
+
             # Count dates
             date_key = memory.date_slug
             dates[date_key] = dates.get(date_key, 0) + 1

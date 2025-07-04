@@ -27,7 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def main():
+async def main() -> None:
     """Main server function"""
     logger.info("🧠 Starting MCP-Memry Server...")
 

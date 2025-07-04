@@ -1,18 +1,28 @@
 """
 Core types and interfaces for MCP storage abstraction
 """
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Generic, List, Optional, TypeVar
-from pydantic import BaseModel
 
-# Generic type for entities
-EntityType = TypeVar("EntityType", bound=BaseModel)
+from abc import ABC, abstractmethod
+from typing import Any, Generic, TypeVar
+
+from pydantic import BaseModel, Field
+
+
+class BaseEntity(BaseModel):
+    """Base entity class with required ID field"""
+    
+    id: str = Field(description="Unique entity identifier")
+
+
+# Generic type for entities with ID field
+EntityType = TypeVar("EntityType", bound=BaseEntity)
 
 
 class EntityFilter(BaseModel):
     """Base class for entity filtering"""
-    limit: Optional[int] = None
-    offset: Optional[int] = None
+
+    limit: int | None = None
+    offset: int | None = None
 
 
 class StorageBackend(ABC, Generic[EntityType]):
@@ -23,15 +33,17 @@ class StorageBackend(ABC, Generic[EntityType]):
         """Create new entity and return the created entity with any generated fields"""
 
     @abstractmethod
-    async def get(self, entity_id: str) -> Optional[EntityType]:
+    async def get(self, entity_id: str) -> EntityType | None:
         """Get entity by ID, returns None if not found"""
 
     @abstractmethod
-    async def list(self, filter_data: Optional[EntityFilter] = None) -> List[EntityType]:
+    async def list(self, filter_data: EntityFilter | None = None) -> list[EntityType]:
         """List entities with optional filtering"""
 
     @abstractmethod
-    async def update(self, entity_id: str, updates: Dict[str, Any]) -> Optional[EntityType]:
+    async def update(
+        self, entity_id: str, updates: dict[str, Any]
+    ) -> EntityType | None:
         """Update entity with partial data, returns updated entity or None if not found"""
 
     @abstractmethod
