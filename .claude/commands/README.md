@@ -39,7 +39,7 @@ Creates well-structured GitHub issues from planning sessions or requirements dis
 
 **Usage:**
 ```
-/project:write-github-issue "Add Apple Calendar integration to local server similar to Notes"
+/project:write-github-issue "Add new workflow management features to tides server"
 ```
 
 **Process:**

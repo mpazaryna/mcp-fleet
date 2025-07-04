@@ -21,7 +21,7 @@ Use monorepo architecture with shared packages and independent server deployment
 
 **Structure:**
 - `packages/`: Shared libraries (mcp_core, claude_client, common_tools)
-- `servers/`: Individual MCP servers (tides, compass, toolkit)
+- `servers/`: Individual MCP servers (tides, compass, memry)
 - Workspace dependencies with uv
 - Multi-stage Docker builds for independent deployment
 

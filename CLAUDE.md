@@ -17,16 +17,13 @@ uv run pytest -m e2e   # Run end-to-end tests only
 uv run pytest -m 'not e2e'  # Run unit/integration tests
 
 # Server development (from workspace root)
-uv run python servers/local/mcp_main.py      # Start local server
 uv run python servers/tides/main.py          # Start tides server  
 uv run python servers/compass/main.py        # Start compass server
-uv run python servers/toolkit/main.py        # Start toolkit server
 ```
 
 ### Testing Individual Components
 ```bash
 # From workspace root
-uv run pytest servers/local/tests/test_apple_notes_tools.py
 uv run pytest packages/mcp_core/tests/
 uv run pytest servers/tides/tests/ -v
 ```
@@ -34,7 +31,7 @@ uv run pytest servers/tides/tests/ -v
 ## Architecture Overview
 
 ### Core Structure
-- `/servers/` - Four main MCP servers (local, tides, compass, toolkit)
+- `/servers/` - Three main MCP servers (tides, compass, memry)
 - `/packages/` - Three shared libraries (mcp_core, claude_client, common_tools)
 - `/projects/` - Shared workspace for orchestration framework project data
 
@@ -53,21 +50,6 @@ All servers implement the Model Context Protocol for Claude Desktop integration:
 
 ## Server Architectures
 
-### Local (`/servers/local/`)
-Native macOS system integrations that bypass Docker limitations for full system access.
-
-**Core Tools:**
-- `create_note` - Create notes in Apple Notes with title and content
-- `list_notes` - List all notes or notes from specific folders
-- `search_notes` - Search notes by title or content
-- `create_folder` - Create new folders in Apple Notes
-- `list_folders` - List all existing folders
-
-**Integration Features:**
-- **AppleScript-based** - Direct native macOS application control
-- **No Docker needed** - Runs natively for full system access
-- **TDD methodology** - Comprehensive test suite with E2E Apple Notes testing
-- **Future expansion** - Architecture ready for Reminders and Calendar integration
 
 ### Tides (`/servers/tides/`)
 Rhythmic workflow management based on natural tidal patterns for sustainable productivity cycles.
@@ -104,17 +86,6 @@ Systematic project methodology through exploration-to-execution phases. Enforces
 - **Task breakdown** - Context-aware execution planning with priorities
 - **File persistence** - Projects stored in structured workspace directories
 
-### Toolkit (`/servers/toolkit/`)
-Essential file operations and utilities for other workflows and general productivity tasks.
-
-**Core Tools:**
-- File operations (read, write, list directories)
-- Text processing and manipulation
-- Data export and formatting utilities
-- Development workflow support
-
-**Note on Drafts Integration:**
-The toolkit server includes Drafts app integration tools, but these have a known limitation: Docker containerization prevents URL schemes from opening host GUI applications. For Drafts-like functionality, use the **local** server's Apple Notes integration instead.
 
 ## Shared Packages
 
@@ -146,17 +117,6 @@ Claude Desktop configuration:
 ```json
 {
   "mcpServers": {
-    "local": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/path/to/mcp-fleet",
-        "run",
-        "python",
-        "servers/local/mcp_main.py"
-      ],
-      "env": {}
-    },
     "tides": {
       "command": "uv",
       "args": [
@@ -181,33 +141,19 @@ Claude Desktop configuration:
       ],
       "env": {}
     },
-    "toolkit": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "/path/to/mcp-fleet",
-        "run", 
-        "python",
-        "servers/toolkit/main.py"
-      ],
-      "env": {}
-    }
   }
 }
 ```
 
 ### Server Descriptions
 
-- **local**: Native macOS system integrations (Apple Notes, future Reminders/Calendar) - bypasses Docker limitations for full system access
 - **tides**: Rhythmic workflow management based on natural tidal patterns for sustainable productivity
 - **compass**: Systematic project methodology through exploration-to-execution phases with enforced depth
-- **toolkit**: Essential file operations, utilities, and development workflow support
 
 ### Docker Deployment (Legacy)
 
 Docker deployment is available but has limitations:
 - GUI applications (like Drafts) cannot be opened from containers
-- Native system integrations (like Apple Notes) don't work in containers
 - For full functionality, use native development setup
 
 ## Testing Strategy
@@ -228,10 +174,9 @@ uv run pytest
 # Specific test categories
 uv run pytest -m e2e                    # End-to-end tests only
 uv run pytest -m 'not e2e'              # Unit/integration only
-uv run pytest servers/local/tests/ -v   # Specific server tests
 
-# Apple Notes E2E testing (creates real notes)
-uv run pytest servers/local/tests/test_apple_notes_tools.py -m e2e -s
+# Example server-specific tests
+uv run pytest servers/memry/tests/ -v
 
 # UAT - Final acceptance testing
 python tests/uat/test_memry_docker_uat.py    # User acceptance test for memry
@@ -281,9 +226,5 @@ This ensures consistent, trackable development with proper issue management and 
 ### Python Migration
 This project was migrated from TypeScript/Deno to Python to:
 - Provide better system integration capabilities
-- Support native macOS application control via AppleScript
 - Leverage Python's rich ecosystem for AI and productivity tools
-- Enable easier local development without container limitations
 
-### Local Server Rationale  
-The local server was created specifically to bypass Docker GUI limitations discovered during Drafts integration attempts. It provides a template for future native system integrations while maintaining the same MCP protocol standards as other servers.

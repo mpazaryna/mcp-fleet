@@ -48,42 +48,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [2.2.0] - 2025-06-27 (Unreleased)
 
-### Added
-- Local MCP Server: Native macOS system integrations that bypass Docker limitations
-  - **Apple Notes Integration**: Complete AppleScript-based note management
-    - `create_note` - Create notes with title and content in Apple Notes
-    - `list_notes` - List all notes or notes from specific folders
-    - `search_notes` - Search notes by title or content
-    - `create_folder` - Create new folders in Apple Notes
-    - `list_folders` - List all existing folders
-  - **TDD Implementation**: Comprehensive 19-test suite with unit, integration, and E2E testing
-  - **E2E Apple Notes Testing**: Real note creation testing with manual verification prompts
-  - **Future-Ready Architecture**: Designed for expansion to Reminders and Calendar integration
-
 ### Changed
-- **CLAUDE.md**: Complete rewrite to reflect Python architecture and new local server
+- **CLAUDE.md**: Complete rewrite to reflect Python architecture
   - Updated from outdated Deno/TypeScript references to current Python implementation
-  - Added comprehensive local server documentation with AppleScript integration details
   - Updated all command examples to use `uv` instead of `deno`
-  - Added proper Claude Desktop configuration patterns for all four servers
-- **Workspace Configuration**: Added local server to uv workspace members in pyproject.toml
+  - Added proper Claude Desktop configuration patterns for all servers
+- **Workspace Configuration**: Updated uv workspace members in pyproject.toml
 - **Claude Desktop Integration**: Updated configuration to use proper `uv --directory` pattern for workspace execution
 
 ### Technical Implementation
-- **AppleScript Integration**: Native macOS application control for direct system access
 - **MCP Protocol Compliance**: Full stdio transport with proper tool registration and handlers
-- **Native Deployment**: Runs outside Docker containers for unrestricted system access
 - **Python Async Patterns**: Consistent async/await implementation following MCP Fleet standards
 
-### Why Local Deploys Differently
-The local server uses native deployment (uv workspace execution) instead of Docker containerization for a critical reason: **Docker GUI limitations**. During development of Drafts app integration, we discovered that Docker containers cannot execute host GUI applications or open URL schemes due to container isolation from macOS GUI systems. The local server bypasses these limitations by running natively with full system access, enabling:
-- Direct AppleScript execution for native app control
-- URL scheme handling for system integrations  
-- Future expansion to other macOS productivity apps (Reminders, Calendar, etc.)
-- Unrestricted access to user's application ecosystem
-
 ### Fixed
-- **Docker Integration Limitations**: Documented and resolved GUI application access issues
 - **MCP Protocol Implementation**: Proper stdio server implementation replacing custom JSON-RPC handling
 - **Workspace Dependencies**: Correct uv workspace integration for shared package access
 

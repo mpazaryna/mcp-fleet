@@ -20,7 +20,7 @@ Major cleanup session focusing on folder structure, Docker simplification, and d
 ### OF Server Removal
 - Removed problematic Orchestration Framework server
 - Template engine was causing deployment complexity
-- Focused on three stable servers: tides, compass, toolkit
+- Focused on core stable servers: tides, compass, memry
 - Updated GitHub Actions to remove OF build targets
 
 ### Documentation Reorganization
