@@ -33,7 +33,7 @@ Example:
 3. **Creates Version Tag**
    - Determines next version based on type
    - Creates annotated tag with release message
-   - Updates README.md with version badge (if applicable)
+   - Updates pyproject.toml files with new version
 
 4. **Pushes Everything**
    - Pushes main branch
@@ -49,7 +49,7 @@ Example:
 
 - ✅ Feature branch successfully merged to main
 - ✅ Semantic version tag created and pushed
-- ✅ README.md updated with new version (if version badge exists)
+- ✅ pyproject.toml files updated with new version
 - ✅ All changes pushed to GitHub
 - ✅ Feature branch cleaned up
 - ✅ Clear release notes provided
@@ -130,13 +130,22 @@ git pull origin main
 echo "🔀 Merging feature branch..."
 git merge --no-ff "$CURRENT_BRANCH" -m "Merge branch '$CURRENT_BRANCH' for $NEW_VERSION release"
 
-# Update README.md if it contains a version badge
-if grep -q "version.*badge" README.md 2>/dev/null || grep -q "![Version]" README.md 2>/dev/null; then
-    echo "📝 Updating README.md version..."
-    # This is a placeholder - adjust based on actual badge format
-    sed -i '' "s/version-v[0-9]*\.[0-9]*\.[0-9]*/version-$NEW_VERSION/g" README.md 2>/dev/null || true
-    git add README.md
-    git commit -m "chore: Update version to $NEW_VERSION" 2>/dev/null || true
+# Update pyproject.toml files with new version
+echo "📝 Updating pyproject.toml versions..."
+PYPROJECT_FILES=$(find . -name "pyproject.toml" -path "*/servers/*" -o -name "pyproject.toml" -path "*/packages/*")
+VERSION_ONLY=${NEW_VERSION#v}
+
+for file in $PYPROJECT_FILES; do
+    if grep -q '^version = ' "$file"; then
+        echo "  Updating $file"
+        sed -i '' "s/^version = .*/version = \"$VERSION_ONLY\"/" "$file"
+        git add "$file"
+    fi
+done
+
+# Commit version updates if any files were changed
+if ! git diff --cached --quiet; then
+    git commit -m "chore: Update version to $NEW_VERSION"
 fi
 
 # Get commit messages for release notes
@@ -200,3 +209,4 @@ The command will fail gracefully if:
 - GitHub remote must be properly set up
 - Must have push permissions to main branch
 - Must be on a feature branch (not main)
+- pyproject.toml files must exist for version updates
