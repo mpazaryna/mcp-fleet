@@ -7,8 +7,8 @@ from typing import List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
-from mcp_core.types import MCPTool
-from ..storage.tide_storage import TideStorage, CreateTideInput, ListTidesFilter, FlowEntry
+from core.types import MCPTool
+from .tide_storage import TideStorage, CreateTideInput, ListTidesFilter, FlowEntry
 
 
 logger = logging.getLogger(__name__)

@@ -5,7 +5,6 @@ Detailed technical specifications, architecture documents, and system requiremen
 ## Current Specifications
 
 ### Architecture
-- [Toolkit Architecture](./toolkit-architecture.md) - Shared infrastructure patterns
 - [True Microservices Architecture](./true-microservices-architecture.md) - Future architecture vision
 
 ### Features

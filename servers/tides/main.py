@@ -9,8 +9,8 @@ import asyncio
 import logging
 import sys
 
-from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
-from src.tools.tide_tools import tide_tools, tide_handlers
+from core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
+from src.tide_tools import tide_tools, tide_handlers
 
 
 # Configure logging

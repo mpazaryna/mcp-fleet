@@ -9,9 +9,9 @@ import asyncio
 import logging
 import sys
 
-from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
-from src.tools.project_tools import project_tools, project_handlers
-from src.tools.exploration_tools import exploration_tools, exploration_handlers
+from core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions
+from src.project_tools import project_tools, project_handlers
+from src.exploration_tools import exploration_tools, exploration_handlers
 
 
 # Configure logging

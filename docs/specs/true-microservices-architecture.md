@@ -14,13 +14,13 @@ This specification outlines the evolution of MCP Fleet from its current hybrid a
 Currently, the MCP Fleet has overlapping responsibilities:
 
 - **Tides Server**: Handles both workflow logic AND file I/O operations
-- **Toolkit Server**: Provides file I/O operations but tides doesn't use it
+- **Common Tools**: Provides file I/O operations but tides doesn't use them
 - **Result**: Two different file I/O implementations doing similar work
 
 ### Tool Duplication
 Users see both sets of tools in Claude Desktop:
 - `tides:save_tide_report` - Direct file operations by tides
-- `toolkit:write_file` - File operations by toolkit
+- `common_tools:write_file` - File operations by common tools
 
 ## Proposed Architecture
 
@@ -40,7 +40,7 @@ Each server focuses on its core domain:
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                                  │
                     ┌─────────────────┐
-                    │     Toolkit     │
+                    │  Common Tools   │
                     │     Server      │
                     │                 │
                     │ ONLY:           │
@@ -87,14 +87,14 @@ Each server focuses on its core domain:
 ```
 1. tides:flow_tide
 2. tides:get_tide_data (new helper)
-3. toolkit:write_file (user controls format/location)
+3. common_tools:write_file (user controls format/location)
 ```
 
 ## Benefits
 
 ### 1. True Separation of Concerns
 - **Tides**: Pure workflow management
-- **Toolkit**: Pure infrastructure operations
+- **Common Tools**: Pure infrastructure operations
 - **No overlap**: Each server has single responsibility
 
 ### 2. User Empowerment
@@ -109,7 +109,7 @@ Each server focuses on its core domain:
 
 ### 4. Future Extensibility
 - Easy to add new domain servers
-- All servers benefit from toolkit improvements
+- All servers benefit from common tools improvements
 - Clean migration path for new capabilities
 
 ## New User Workflows
@@ -120,7 +120,7 @@ Each server focuses on its core domain:
 tides:flow_tide → Records session data
 
 # 2. Generate custom report
-toolkit:write_file → User saves whatever format they want
+common_tools:write_file → User saves whatever format they want
 ```
 
 ### Advanced Reporting
@@ -133,20 +133,20 @@ tides:flow_tide (afternoon)
 tides:list_tides → Get all tide data
 
 # 3. Create custom reports
-toolkit:write_file → Daily summary
-toolkit:write_file → Weekly analysis  
-toolkit:write_file → CSV export for analytics
+common_tools:write_file → Daily summary
+common_tools:write_file → Weekly analysis  
+common_tools:write_file → CSV export for analytics
 ```
 
 ### Organized File Management
 ```bash
 # 1. Create organized structure
-toolkit:create_directory → /reports/2024/june/
-toolkit:create_directory → /reports/2024/june/daily/
-toolkit:create_directory → /reports/2024/june/weekly/
+common_tools:create_directory → /reports/2024/june/
+common_tools:create_directory → /reports/2024/june/daily/
+common_tools:create_directory → /reports/2024/june/weekly/
 
 # 2. Save reports in organized structure
-toolkit:write_file → Specific locations and formats
+common_tools:write_file → Specific locations and formats
 ```
 
 ## Technical Implementation
@@ -178,7 +178,7 @@ export const tideReportGenerators = {
 
 ### 1. Clean Tool Separation
 - ✅ Tides tools focus only on workflow logic
-- ✅ Toolkit tools handle all file operations
+- ✅ Common tools handle all file operations
 - ✅ No functionality overlap
 
 ### 2. User Experience
@@ -202,7 +202,7 @@ export const tideReportGenerators = {
 ### For Developers
 1. **Update tests** to reflect new architecture
 2. **Clean up file I/O code** from domain servers
-3. **Improve toolkit** based on real usage patterns
+3. **Improve common tools** based on real usage patterns
 4. **Document** the new development patterns
 
 ## Timeline
@@ -217,6 +217,6 @@ export const tideReportGenerators = {
 
 This evolution represents the maturation of MCP Fleet from a collection of servers to a true microservices ecosystem. Each server will have a clear, focused purpose, and users will benefit from the composability and flexibility that comes from proper separation of concerns.
 
-The toolkit server becomes the reliable infrastructure foundation that all other servers and users can depend on, while domain servers focus entirely on their specialized logic.
+The common tools package becomes the reliable infrastructure foundation that all other servers and users can depend on, while domain servers focus entirely on their specialized logic.
 
-This is the realization of the "fleet with shared toolkit" vision - specialized vessels working together with shared, reliable infrastructure.
+This is the realization of the "fleet with shared infrastructure" vision - specialized vessels working together with shared, reliable infrastructure.

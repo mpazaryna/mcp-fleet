@@ -6,8 +6,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from mcp_storage.utils import get_current_timestamp
-from mcp_storage.types import EntityFilter
+from storage.utils import get_current_timestamp
+from storage.types import EntityFilter
 
 
 class MemoryData(BaseModel):

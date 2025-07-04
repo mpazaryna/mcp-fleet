@@ -17,7 +17,7 @@ from storage.entity import create_entity_storage
 
 # Add memry models to path
 sys.path.append(str(Path(__file__).parent.parent.parent.parent / "servers" / "memry" / "src"))
-from models.memory_models import MemoryData, CreateMemoryInput
+from memory_models import MemoryData, CreateMemoryInput
 
 
 class TestJSONFileBackend:

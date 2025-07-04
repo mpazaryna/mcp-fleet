@@ -10,8 +10,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from mcp_core.types import MCPTool
-from ..managers.project_manager import ProjectManager, ProjectMetadata
+from core.types import MCPTool
+from .project_manager import ProjectManager, ProjectMetadata
 
 
 logger = logging.getLogger(__name__)

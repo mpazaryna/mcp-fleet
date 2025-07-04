@@ -9,13 +9,13 @@ import asyncio
 import logging
 import sys
 
-from mcp_core import (
+from core import (
     MCPServerConfig,
     MCPServerOptions,
     StdioTransport,
     create_mcp_server,
 )
-from src.tools.memory_tools import memory_handlers, memory_tools
+from src.memory_tools import memory_handlers, memory_tools
 
 # Configure logging
 logging.basicConfig(

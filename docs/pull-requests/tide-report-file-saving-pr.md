@@ -26,7 +26,7 @@ Adds comprehensive file saving and export capabilities to the Tides MCP server, 
 
 ### 🔧 Configuration Updates
 - **Claude Desktop config** with volume mount for `~/Documents/TideReports`
-- **Docker MCP Toolkit** compatible resource limits maintained
+- **Docker MCP** compatible resource limits maintained
 - **Environment variable** support for flexible deployment
 
 ## Technical Implementation
@@ -58,7 +58,7 @@ Claude Desktop → MCP Protocol → Tides Container → Volume Mount → Host Fi
 - [x] Docker image builds successfully
 - [x] Volume mounts configured correctly
 - [x] Reports directory created automatically
-- [x] MCP Toolkit resource limits respected
+- [x] MCP resource limits respected
 
 ### ✅ Functionality Testing
 - [x] Tide report generation works

@@ -13,7 +13,6 @@ export ANTHROPIC_API_KEY="your-api-key-here"
 # Pull Python images (use branch tag until merged to main)
 docker pull pazland/mcp-fleet-tides:python-migration
 docker pull pazland/mcp-fleet-compass:python-migration  
-docker pull pazland/mcp-fleet-toolkit:python-migration
 docker pull pazland/mcp-fleet-of:python-migration
 
 # Test individual servers
@@ -28,8 +27,6 @@ docker run -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
 docker run -v "$(pwd)/workspace:/app/workspace" \
   pazland/mcp-fleet-compass:python-migration
 
-docker run -v "$(pwd)/data:/app/data" \
-  pazland/mcp-fleet-toolkit:python-migration
 ```
 
 ### Development Testing Commands
@@ -57,11 +54,6 @@ docker run --rm -it \
   -v "$(pwd)/workspace:/app/workspace" \
   pazland/mcp-fleet-compass:python-migration
 
-# test-toolkit.sh
-#!/bin/bash
-docker run --rm -it \
-  -v "$(pwd)/data:/app/data" \
-  pazland/mcp-fleet-toolkit:python-migration
 ```
 
 ### Claude Desktop Configuration
@@ -97,14 +89,6 @@ Use Docker Hub images in your Claude Desktop config:
         "pazland/mcp-fleet-compass:latest"
       ]
     },
-    "toolkit": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "-i", 
-        "-v", "/path/to/data:/app/data",
-        "pazland/mcp-fleet-toolkit:latest"
-      ]
-    }
   }
 }
 ```
@@ -116,12 +100,11 @@ Use Docker Hub images in your Claude Desktop config:
    docker pull pazland/mcp-fleet-of:latest
    docker pull pazland/mcp-fleet-tides:latest
    docker pull pazland/mcp-fleet-compass:latest
-   docker pull pazland/mcp-fleet-toolkit:latest
    ```
 
 2. **Create test directories:**
    ```bash
-   mkdir -p workspace reports data
+   mkdir -p workspace reports
    ```
 
 3. **Run interactive tests:**
@@ -135,8 +118,6 @@ Use Docker Hub images in your Claude Desktop config:
    # Test Compass project methodology
    ./test-compass.sh
    
-   # Test Toolkit file operations
-   ./test-toolkit.sh
    ```
 
 4. **Verify server health:**

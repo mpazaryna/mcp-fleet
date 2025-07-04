@@ -14,19 +14,6 @@
         "mcp-fleet:tides"
       ]
     },
-    "toolkit": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "--name", "toolkit-mcp-session",
-        "-v", "${HOME}/Documents/ToolkitData:/app/data",
-        "--cpus=1",
-        "--memory=2g",
-        "mcp-fleet:toolkit"
-      ]
-    },
     "compass": {
       "command": "docker",
       "args": [

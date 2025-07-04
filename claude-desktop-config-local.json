@@ -9,14 +9,6 @@
         "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/packages:/Users/mpaz/workspace/mcp-fleet/servers"
       }
     },
-    "toolkit": {
-      "command": "uv",
-      "args": ["run", "python", "servers/toolkit/main.py"],
-      "cwd": "/Users/mpaz/workspace/mcp-fleet",
-      "env": {
-        "PYTHONPATH": "/Users/mpaz/workspace/mcp-fleet/packages:/Users/mpaz/workspace/mcp-fleet/servers"
-      }
-    },
     "compass": {
       "command": "uv",
       "args": ["run", "python", "servers/compass/main.py"],

@@ -65,7 +65,7 @@ Currently, the Tides MCP server operates entirely in-memory within a Docker cont
 
 #### NFR-3: Compatibility
 - **MCP Protocol**: Maintain full compatibility with existing tools
-- **Docker Desktop**: Work with Docker MCP Toolkit requirements
+- **Docker Desktop**: Work with Docker MCP requirements
 - **Claude Desktop**: Seamless integration with current configuration
 
 ## Technical Design
@@ -231,7 +231,7 @@ docker run -v "/Users/username/Documents/TideReports:/app/reports" mcp/tides:lat
 - **Testing**: Load testing with large tide datasets
 
 ### Risk: Docker Desktop Compatibility
-- **Mitigation**: Follow MCP Toolkit requirements exactly
+- **Mitigation**: Follow MCP requirements exactly
 - **Testing**: Multi-platform Docker testing
 
 ## Success Metrics
