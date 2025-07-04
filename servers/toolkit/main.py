@@ -8,7 +8,7 @@ import asyncio
 import logging
 import sys
 
-from mcp_core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions, MCPTool
+from core import create_mcp_server, StdioTransport, MCPServerConfig, MCPServerOptions, MCPTool
 from src.tools.file_tools import file_tools, file_handlers
 from src.tools.drafts_tools import draft_tools, draft_handlers
 
