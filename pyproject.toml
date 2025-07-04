@@ -1,4 +1,5 @@
 # Root workspace configuration - no package definition needed
+# Updated after removing toolkit and local servers
 
 [tool.uv.workspace]
 members = [
