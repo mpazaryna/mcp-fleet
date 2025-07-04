@@ -105,7 +105,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 ### Removed
 - **OF (Orchestration Framework) Server**: Removed problematic server implementation
   - Eliminated complex template engine causing deployment issues
-  - Simplified codebase to focus on stable servers (tides, compass, toolkit)
+  - Simplified codebase to focus on stable servers (tides, compass)
   - Removed 50+ template files and related Python cache artifacts
 - **Redundant Docker Files**: Cleaned up deployment infrastructure
   - Removed docker-compose.yml (redundant with Dockerfile)
@@ -120,7 +120,7 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 
 ### Technical Details
 - **Workspace Structure**: Explicit server listing in pyproject.toml for better control
-- **Docker Build**: Multi-stage builds for tides, compass, and toolkit servers only
+- **Docker Build**: Multi-stage builds for tides, compass servers only
 - **GitHub Actions**: Continues to publish to Docker Hub with new folder structure
 - **Python Paths**: Updated PYTHONPATH configurations in all development configs
 
@@ -219,44 +219,6 @@ The local server uses native deployment (uv workspace execution) instead of Dock
 - **Docker Volume Mounting**: Fixed workspace detection to use mounted directories instead of container-internal paths
 - **File Persistence**: Ensured all project files are saved to persistent mounted volumes
 - **Cross-Platform Compatibility**: Proper workspace detection for both native and Docker deployments
-
-## [0.3.0] - 2025-06-25
-
-### Added
-- **Toolkit MCP Server**: Complete shared infrastructure server for file I/O operations
-  - `write_file` - Save content with automatic directory creation and encoding support
-  - `read_file` - Read file contents with UTF-8 and Base64 encoding
-  - `create_directory` - Create directories with recursive support
-  - `list_files` - List directory contents with pattern filtering and recursive traversal
-  - `delete_file` - Safe file and directory deletion
-- **Docker Integration**: Full containerization support for toolkit server
-  - `Dockerfile.toolkit` for standalone toolkit deployment
-  - Updated `docker-compose.yml` with toolkit service and persistent volumes
-  - Integration with Docker Desktop MCP Toolkit
-- **Comprehensive Testing**: Full test suite with 24 test scenarios
-  - Unit tests for all tool definitions and handlers
-  - Integration tests for complete workflow validation
-  - Pattern matching, encoding support, and error handling tests
-- **Architecture Documentation**: Complete documentation of microservices pattern
-  - `docs/toolkit-architecture.md` - Comprehensive architectural overview
-  - `docs/specifications/true-microservices-architecture.md` - Future evolution plan
-  - Visual diagrams and implementation patterns
-
-### Changed
-- **Workspace Configuration**: Updated `deno.json` to include toolkit in workspace
-- **Claude Desktop Config**: Added toolkit server to `claude-desktop-config.json`
-- **Build System**: Added toolkit to Docker build tasks and commands
-
-### Technical Implementation
-- **Separation of Concerns**: Clear distinction between domain logic and infrastructure
-- **Shared Infrastructure**: Common file operations available to all MCP Fleet servers
-- **Production Ready**: Comprehensive error handling, logging, and resource management
-- **Extensible Design**: Framework for adding additional shared utilities
-
-### Architecture Evolution
-- **Current State**: Hybrid architecture with both direct file I/O and toolkit services
-- **Future Vision**: Pure microservices with toolkit handling all infrastructure concerns
-- **Migration Path**: Documented plan for removing file I/O from domain servers
 
 ## [0.1.1] - 2025-06-25
 

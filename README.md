@@ -18,10 +18,6 @@ Tides helps create balanced work cycles that prevent burnout while maintaining c
 Guides projects through a 4-phase methodology designed to prevent superficial work and ensure deep, meaningful outcomes.
 Compass enforces thorough exploration before execution, creating lasting value rather than quick wins. [Learn more →](./servers/compass/)
 
-### 🛠️ [Toolkit](./servers/toolkit/) - Essential Infrastructure Services
-Provides fundamental file operations and utilities needed by other MCP servers and workflows.
-Toolkit serves as shared infrastructure, handling common tasks so domain-specific servers can focus on their core functionality. [Learn more →](./servers/toolkit/)
-
 ## Architecture
 
 ### Why Monorepo
@@ -59,7 +55,7 @@ Each server is designed to work independently through Claude Desktop's MCP integ
 ### Software Developers  
 - **Project Planning**: Compass for requirement gathering and specification
 - **Work-Life Balance**: Tides for sustainable development cycles
-- **File Management**: Toolkit for build processes and project organization
+- **File Management**: Built-in file operations for project organization
 
 ### Creative Professionals
 - **Writers**: Tides for managing creative energy across projects

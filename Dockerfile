@@ -53,17 +53,6 @@ LABEL org.opencontainers.image.version="2.0.0"
 LABEL mcp.server.name="compass"
 LABEL mcp.server.tools="project_management,exploration,specification,execution,systematic_methodology"
 
-# Toolkit MCP Server
-FROM mcp-base AS toolkit
-WORKDIR /app/servers/toolkit
-STOPSIGNAL SIGTERM
-ENTRYPOINT ["uv", "run", "python", "main.py"]
-LABEL org.opencontainers.image.title="Toolkit MCP Server"
-LABEL org.opencontainers.image.description="Essential file operations and utility tools for MCP servers"
-LABEL org.opencontainers.image.vendor="MCP Fleet"
-LABEL org.opencontainers.image.version="2.0.0"
-LABEL mcp.server.name="toolkit"
-LABEL mcp.server.tools="file_operations,utility_tools,common_tools"
 
 # Memry MCP Server
 FROM mcp-base AS memry

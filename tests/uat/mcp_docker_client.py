@@ -263,12 +263,6 @@ MEMRY_SERVER = MCPServerInfo(
     startup_delay=2.0
 )
 
-TOOLKIT_SERVER = MCPServerInfo(
-    name="toolkit",
-    docker_image="pazland/mcp-fleet-toolkit:latest",
-    volume_mappings={},  # Will be set per test  
-    startup_delay=2.0
-)
 
 
 def create_test_workspace() -> Path:
