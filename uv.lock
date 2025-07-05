@@ -122,7 +122,7 @@ wheels = [
 
 [[package]]
 name = "compass"
-version = "3.0.0"
+version = "4.1.0"
 source = { editable = "servers/compass" }
 dependencies = [
     { name = "aiofiles" },
@@ -141,7 +141,7 @@ requires-dist = [
 
 [[package]]
 name = "core"
-version = "3.0.0"
+version = "4.1.0"
 source = { editable = "packages/core" }
 dependencies = [
     { name = "mcp" },
@@ -270,7 +270,7 @@ wheels = [
 
 [[package]]
 name = "memry"
-version = "3.0.0"
+version = "4.1.0"
 source = { editable = "servers/memry" }
 dependencies = [
     { name = "aiofiles" },
@@ -713,7 +713,7 @@ wheels = [
 
 [[package]]
 name = "storage"
-version = "3.0.0"
+version = "4.1.0"
 source = { editable = "packages/storage" }
 dependencies = [
     { name = "aiofiles" },
@@ -728,7 +728,7 @@ requires-dist = [
 
 [[package]]
 name = "tides"
-version = "3.0.0"
+version = "4.1.0"
 source = { editable = "servers/tides" }
 dependencies = [
     { name = "aiofiles" },

@@ -11,7 +11,7 @@
         "-v", "${HOME}/Documents/TideReports:/app/reports",
         "--cpus=1",
         "--memory=2g",
-        "mcp-fleet:tides"
+        "pazland/mcp-fleet-tides:latest"
       ]
     },
     "compass": {
@@ -24,7 +24,7 @@
         "-v", "${HOME}/Documents/CompassProjects:/app/workspace",
         "--cpus=1",
         "--memory=2g",
-        "mcp-fleet:compass"
+        "pazland/mcp-fleet-compass:latest"
       ]
     },
     "of": {
@@ -38,7 +38,7 @@
         "-v", "${HOME}/Documents/OrchestrationProjects:/app/projects",
         "--cpus=1",
         "--memory=2g",
-        "mcp-fleet:of"
+        "pazland/mcp-fleet-memry:latest"
       ]
     }
   }
