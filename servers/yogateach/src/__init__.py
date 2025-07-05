@@ -1,0 +1,1 @@
+"""YogaTeach MCP Server source code."""

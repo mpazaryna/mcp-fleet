@@ -1,0 +1,1 @@
+"""YogaTeach MCP Server for generating yoga setlists and dharma talks."""
